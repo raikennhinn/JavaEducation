@@ -10,7 +10,37 @@ import java.sql.Statement;
 
 public class StartUp {
 
+	 //enumの定義
+	 enum Seibetu{
+		 Otoko(0, "男"),// 男
+		 Onna(1, "女");// 女
+
+		private final int scode;
+		private final String sname;
+
+		 private Seibetu(int scode,String sname) {
+			 this.scode = scode;
+			 this.sname = sname;
+		 }
+
+		 public static Seibetu getSeibetu(int code) {
+			 if(code == Seibetu.Otoko.scode) {
+				 return Seibetu.Otoko;
+			 } else if(code == Seibetu.Onna.scode) {
+				 return Seibetu.Onna;
+			 } else {
+				 throw new IllegalArgumentException("不明な性別です。");
+			 }
+		 }
+
+		 public int getScode() {
+			 return this.scode;
+		 }
+	 }
+
+
 	public static void main(String[] args) {
+
 		// 第一問　JDBCドライバを使って、MySQLとの接続を行う
 		// とりあえずエラーがでなければOK
 		// localhostのMySQLに、rikaiユーザーで認証。（パスワードもrikai）
@@ -37,38 +67,31 @@ public class StartUp {
 			// ３従業員のデータ数は、実行するまでわからないものとする
 
 			//ステートメントの作成（問い合わせ等を実施するために必要）
-			Statement stmt1 = conn.createStatement();
-			Statement stmt2 = conn.createStatement();
-			Statement stmt3 = conn.createStatement();
-			//SQL文を記述し、実行する
-			String sqlemployee = "SELECT * FROM employee";
-			String sqlshozoku = "SELECT * FROM shozoku";
-			String sqlbusyo = "SELECT CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) from shozoku";
+			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt1.executeQuery(sqlemployee);
-			ResultSet rss = stmt2.executeQuery(sqlshozoku);
-			ResultSet busyo = stmt3.executeQuery(sqlbusyo);
+			//SQL文を記述し、実行する
+			String sql = "SELECT employee_no,employee.shozoku_code,employee_name,sex,age,birthday,CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) as shozoku_name FROM employee JOIN shozoku ON employee.shozoku_code = shozoku.shozoku_code";
+
+			ResultSet rs = stmt.executeQuery(sql);
 
 
 			 //データの表示
 			  //二次元配列の定義
 
+
 			//rs（employee）のデータを取得
 			 while(rs.next()) {
 				 int code = rs.getInt("employee_no");			//社員番号
 				 int shozoku = rs.getInt("shozoku_code");		//所属コード
+				 String shozokuName = rs.getString("shozoku_name");	//所属名
 				 String name = rs.getString("employee_name");	//名前
 				 int sex = rs.getInt("sex");					//性別
 				 //性別の結び付け(数を文字へ)を実施する
-
-//				 enumの記述
-//				 public enum {
-//
-//				 }
-
+				 Seibetu sei = Seibetu.getSeibetu(sex);
+				 String sexStr = sei.sname;
 				 int age = rs.getInt("age");					//年齢
 				 Date birthday = rs.getDate("birthday");		//生年月日
-				 System.out.println(code + ":"+ shozoku +":"+name+ ":" );
+//				 System.out.println(code + ":"+ shozoku +":"+name+ ":" );
 				 //配列にデータを格納していく
 
 			 }
@@ -78,15 +101,13 @@ public class StartUp {
 
 
 			 rs.close();
-			 rss.close();
-			 busyo.close();
-			 stmt1.close();
-			 stmt2.close();
-			 stmt3.close();
+			 stmt.close();
+
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 //		System.out.println(conn);
-		}
 	}
+}
+
 
