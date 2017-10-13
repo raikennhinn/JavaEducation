@@ -37,39 +37,56 @@ public class StartUp {
 			// ３従業員のデータ数は、実行するまでわからないものとする
 
 			//ステートメントの作成（問い合わせ等を実施するために必要）
-			Statement stmt = conn.createStatement();
+			Statement stmt1 = conn.createStatement();
+			Statement stmt2 = conn.createStatement();
+			Statement stmt3 = conn.createStatement();
 			//SQL文を記述し、実行する
 			String sqlemployee = "SELECT * FROM employee";
 			String sqlshozoku = "SELECT * FROM shozoku";
 			String sqlbusyo = "SELECT CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) from shozoku";
-			ResultSet rs = stmt.executeQuery(sqlemployee);
-			ResultSet rss = stmt.executeQuery(sqlshozoku);
-			ResultSet busyo = stmt.executeQuery(sqlbusyo);
+
+			ResultSet rs = stmt1.executeQuery(sqlemployee);
+			ResultSet rss = stmt2.executeQuery(sqlshozoku);
+			ResultSet busyo = stmt3.executeQuery(sqlbusyo);
+
 
 			 //データの表示
 			  //二次元配列の定義
 
+			//rs（employee）のデータを取得
 			 while(rs.next()) {
 				 int code = rs.getInt("employee_no");			//社員番号
 				 int shozoku = rs.getInt("shozoku_code");		//所属コード
 				 String name = rs.getString("employee_name");	//名前
 				 int sex = rs.getInt("sex");					//性別
+				 //性別の結び付け(数を文字へ)を実施する
+
+//				 enumの記述
+//				 public enum {
+//
+//				 }
+
 				 int age = rs.getInt("age");					//年齢
 				 Date birthday = rs.getDate("birthday");		//生年月日
-				//配列にデータを格納していく
-				 System.out.println(code);
+				 System.out.println(code + ":"+ shozoku +":"+name+ ":" );
+				 //配列にデータを格納していく
 
 			 }
+			 //ress(shozoku)のデータを取得shozokuとemployeeの結びつけ
+			 //busyoのデータ取得
 
 
 
 			 rs.close();
-			 stmt.close();
+			 rss.close();
+			 busyo.close();
+			 stmt1.close();
+			 stmt2.close();
+			 stmt3.close();
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 //		System.out.println(conn);
 		}
 	}
-
 
