@@ -41,9 +41,10 @@ public class StartUp {
 			//SQL文を記述し、実行する
 			String sqlemployee = "SELECT * FROM employee";
 			String sqlshozoku = "SELECT * FROM shozoku";
-			  ResultSet rs = stmt.executeQuery(sqlemployee);
-			  ResultSet rss = stmt.executeQuery(sqlshozoku);
-
+			String sqlbusyo = "SELECT CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) from shozoku";
+			ResultSet rs = stmt.executeQuery(sqlemployee);
+			ResultSet rss = stmt.executeQuery(sqlshozoku);
+			ResultSet busyo = stmt.executeQuery(sqlbusyo);
 
 			 //データの表示
 			  //二次元配列の定義
@@ -51,15 +52,12 @@ public class StartUp {
 			 while(rs.next()) {
 				 int code = rs.getInt("employee_no");			//社員番号
 				 int shozoku = rs.getInt("shozoku_code");		//所属コード
-				 String Shozoku2 = rss.getString("shozoku_bu");//所属部署、課、係 文字列連結とは
-				 String Shozoku2ka = rss.getString("shozoku_ka");
-				 String Shozoku2kakari = rss.getString("shozoku_kakari");
-				 String renketu = Shozoku2 + Shozoku2ka + Shozoku2kakari;
 				 String name = rs.getString("employee_name");	//名前
 				 int sex = rs.getInt("sex");					//性別
 				 int age = rs.getInt("age");					//年齢
 				 Date birthday = rs.getDate("birthday");		//生年月日
 				//配列にデータを格納していく
+				 System.out.println(code);
 
 			 }
 
@@ -68,10 +66,10 @@ public class StartUp {
 			 rs.close();
 			 stmt.close();
 		}catch(SQLException e){
-			System.out.println("×");
+			e.printStackTrace();
 		}
-
-		System.out.println(conn);
+//		System.out.println(conn);
+		}
 	}
 
-}
+
