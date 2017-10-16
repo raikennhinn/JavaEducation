@@ -72,7 +72,7 @@ public class StartUp {
 			Statement stmt = conn.createStatement();
 
 			//SQL文を記述し、実行する
-			String sql = "SELECT employee_no,employee.shozoku_code,employee_name,sex,age,birthday,CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) as shozoku_name FROM employee JOIN shozoku ON employee.shozoku_code = shozoku.shozoku_code";
+			String sql = "SELECT employee_no,employee.shozoku_code,employee_name,sex,age,birthday,CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) as shozoku_name FROM employee JOIN shozoku ON employee.shozoku_code = shozoku.shozoku_code order by employee_no";
 
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -83,30 +83,56 @@ public class StartUp {
 			String sexStr;
 			int age =0;
 			Date birthday;
+			int count = 0;
 
-			//2次元配列
-//			String[][] date =new String{"",""};
+			while(rs.next()) {
+				count++;
+			}
+			//データの一番初めに戻る
+			rs.first();
+			rs.previous();	// カーソルを-1にする（存在しない行だが、falseになるだけでエラーにはならない）
 
+			//2次元配列の定義
+			String date[][] = new String[count][7];
 
-
+			//配列のカウント実施変数
+			int i =0;
 			//rs（employee）のデータを取得
-			 while(rs.next()) {
+			 while(rs.next()) {		//ここでカーソル0からループ（上でprevious()したおかげ）
+				code = rs.getInt("employee_no");				//社員番号
+				date[i][0]=String.valueOf(code);				//配列に格納
 
-				code = rs.getInt("employee_no");			//社員番号
 
 				shozoku = rs.getInt("shozoku_code");			//所属コード
+				date[i][1]=String.valueOf(shozoku);			//配列に格納
 
-				shozokuName = rs.getString("shozoku_name");	//所属名
+				shozokuName = rs.getString("shozoku_name");		//所属名
+				date[i][2]=String.valueOf(shozokuName);		//配列に格納
+
 				String name = rs.getString("employee_name");	//名前
+				date[i][3]= name;								//配列に格納
 
 				int sex = rs.getInt("sex");					//性別
 				//性別の結び付け(数を文字へ)を実施する
 				Seibetu sei = Seibetu.getSeibetu(sex);
-				sexStr = sei.sname;							//性別が格納されている
+				sexStr = sei.sname;								//性別が格納されている
+				date[i][4]=sexStr;								//配列に格納
 
-				age = rs.getInt("age");					//年齢
-				birthday = rs.getDate("birthday");		//生年月日
-				 //配列にデータを格納していく
+				age = rs.getInt("age");							//年齢
+				date[i][5]=String.valueOf(age);				//配列に格納
+
+				birthday = rs.getDate("birthday");				//生年月日
+				date[i][6]=String.valueOf(birthday);			//配列に格納
+
+				 //iに１をたす
+				i=i+1;
+
+			 }
+
+			 // 二次元配列の中身をループで取り出して出力
+			 System.out.println("社員コード	所属コード	所属名 名前 性別 年齢 生年月日");
+			 for(int j=0; j < count; j++) {
+				 System.out.println(date[j][0]+":"+date[j][1]+":"+date[j][2]+":"+date[j][3]+":"+date[j][4]+":"+date[j][5]+":"+date[j][6]);
 			 }
 
 
