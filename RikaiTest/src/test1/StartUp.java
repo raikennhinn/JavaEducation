@@ -54,6 +54,8 @@ public class StartUp {
 //			e2.printStackTrace();
 //		}
 
+
+
 		//必要事項の記述
 		Connection conn = null;
 		String url = "jdbc:mysql://localhost/sampledb040";
@@ -62,7 +64,7 @@ public class StartUp {
 		//接続実施
 		try {
 			conn = DriverManager.getConnection(url, user, password);
-			// １従業員情報（社員番号、所属コード、所属部・課・係（SQLで文字連結させて）、名前、性別（Java内で男女の文字に変換）enumを使う、年齢、生年月日）を取得して
+			// １従業員情報（社員番号、所属コード、所属部・課・係（SQLで文字連結させて）、名前、性別（Java内で男女の文字に変換）enumを使う、年齢、生年月日を取得して
 			// ２結果を二次元配列に格納する
 			// ３従業員のデータ数は、実行するまでわからないものとする
 
@@ -74,29 +76,39 @@ public class StartUp {
 
 			ResultSet rs = stmt.executeQuery(sql);
 
+			//変数定義
+			int code =0;
+			int shozoku =0;
+			String shozokuName;
+			String sexStr;
+			int age =0;
+			Date birthday;
 
-			 //データの表示
-			  //二次元配列の定義
+			//2次元配列
+//			String[][] date =new String{"",""};
+
 
 
 			//rs（employee）のデータを取得
 			 while(rs.next()) {
-				 int code = rs.getInt("employee_no");			//社員番号
-				 int shozoku = rs.getInt("shozoku_code");		//所属コード
-				 String shozokuName = rs.getString("shozoku_name");	//所属名
-				 String name = rs.getString("employee_name");	//名前
-				 int sex = rs.getInt("sex");					//性別
-				 //性別の結び付け(数を文字へ)を実施する
-				 Seibetu sei = Seibetu.getSeibetu(sex);
-				 String sexStr = sei.sname;
-				 int age = rs.getInt("age");					//年齢
-				 Date birthday = rs.getDate("birthday");		//生年月日
-//				 System.out.println(code + ":"+ shozoku +":"+name+ ":" );
-				 //配列にデータを格納していく
 
+				code = rs.getInt("employee_no");			//社員番号
+
+				shozoku = rs.getInt("shozoku_code");			//所属コード
+
+				shozokuName = rs.getString("shozoku_name");	//所属名
+				String name = rs.getString("employee_name");	//名前
+
+				int sex = rs.getInt("sex");					//性別
+				//性別の結び付け(数を文字へ)を実施する
+				Seibetu sei = Seibetu.getSeibetu(sex);
+				sexStr = sei.sname;							//性別が格納されている
+
+				age = rs.getInt("age");					//年齢
+				birthday = rs.getDate("birthday");		//生年月日
+				 //配列にデータを格納していく
 			 }
-			 //ress(shozoku)のデータを取得shozokuとemployeeの結びつけ
-			 //busyoのデータ取得
+
 
 
 
