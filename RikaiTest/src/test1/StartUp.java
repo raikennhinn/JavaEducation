@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class StartUp {
@@ -41,6 +42,7 @@ public class StartUp {
 
 	public static void main(String[] args) {
 
+
 		// 第一問　JDBCドライバを使って、MySQLとの接続を行う
 		// とりあえずエラーがでなければOK
 		// localhostのMySQLに、rikaiユーザーで認証。（パスワードもrikai）
@@ -61,20 +63,31 @@ public class StartUp {
 		String url = "jdbc:mysql://localhost/sampledb040";
 		String user = "rikai";
 		String password = "rikai";
+		Statement stmt = null;
+		ResultSet rs = null;
 		//接続実施
 		try {
 			conn = DriverManager.getConnection(url, user, password);
+			// 第二問
 			// １従業員情報（社員番号、所属コード、所属部・課・係（SQLで文字連結させて）、名前、性別（Java内で男女の文字に変換）enumを使う、年齢、生年月日を取得して
 			// ２結果を二次元配列に格納する
 			// ３従業員のデータ数は、実行するまでわからないものとする
 
 			//ステートメントの作成（問い合わせ等を実施するために必要）
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 
 			//SQL文を記述し、実行する
-			String sql = "SELECT employee_no,employee.shozoku_code,employee_name,sex,age,birthday,CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) as shozoku_name FROM employee JOIN shozoku ON employee.shozoku_code = shozoku.shozoku_code order by employee_no";
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT employee_no,employee.shozoku_code,employee_name,sex,age,birthday,CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) as shozoku_name ");
+			sb.append("FROM employee ");
+			sb.append("JOIN shozoku ");
+			sb.append("ON employee.shozoku_code = shozoku.shozoku_code ");
+			sb.append("ORDER BY employee_no");
+//			String sql = "SELECT employee_no,employee.shozoku_code,employee_name,sex,age,birthday,CONCAT(shozoku_bu,shozoku_ka,shozoku_kakari) as shozoku_name FROM employee JOIN shozoku ON employee.shozoku_code = shozoku.shozoku_code order by employee_no";
+			String sql = sb.toString();
+//			int num = stmt.executeUpdate(sql);
+			rs = stmt.executeQuery(sql);
 
-			ResultSet rs = stmt.executeQuery(sql);
 
 			//変数定義
 			int code =0;
@@ -98,7 +111,7 @@ public class StartUp {
 			//配列のカウント実施変数
 			int i =0;
 			//rs（employee）のデータを取得
-			 while(rs.next()) {		//ここでカーソル0からループ（上でprevious()したおかげ）
+			while(rs.next()) {		//ここでカーソル0からループ（上でprevious()したおかげ）
 				code = rs.getInt("employee_no");				//社員番号
 				date[i][0]=String.valueOf(code);				//配列に格納
 
@@ -127,25 +140,106 @@ public class StartUp {
 				 //iに１をたす
 				i=i+1;
 
-			 }
+			}
 
-			 // 二次元配列の中身をループで取り出して出力
-			 System.out.println("社員コード	所属コード	所属名 名前 性別 年齢 生年月日");
-			 for(int j=0; j < count; j++) {
-				 System.out.println(date[j][0]+":"+date[j][1]+":"+date[j][2]+":"+date[j][3]+":"+date[j][4]+":"+date[j][5]+":"+date[j][6]);
-			 }
+			// 二次元配列の中身をループで取り出して出力
+			System.out.println("社員コード	所属コード	所属名 名前 性別 年齢 生年月日");
+//			for(int j=0; j < count; j++) {
+//				System.out.println(date[j][0]+":"+date[j][1]+":"+date[j][2]+":"+date[j][3]+":"+date[j][4]+":"+date[j][5]+":"+date[j][6]);
+//			}
+			for(int j =0; j<count; j++) {
+				for(int a =0; a <date[j].length; a++) {
+					if(a == date[j].length - 1) {
+						System.out.println(date[j][a]);
+					}else {
+						System.out.print(date[j][a]+":");
+					}
+				}
+			}
+
+			/*
+			 *  第三問　検索結果をクラスとリストに保持するパターン
+			 */
+			ArrayList<Employee> shyain = new ArrayList<Employee>();
 
 
+			// ResultSetからレコード１件ずつwhileループで各カラムをゲット、
+			//データの一番初めに戻る
+			rs.first();
+			rs.previous();
+
+			/*
+			 * 同じempやszkに繰り返し項目をセットして、それをArrayListに入れているので、
+			 * 全件同じ値になっているはず！！　（実際にループでprintlnして確かめて）
+			 */
+			while(rs.next()) {
+				Employee emp = new Employee();
+				Shozoku szk = new Shozoku();
+			// ResultSetからgetした各項目を、EmployeeとShozokuオブジェクトにセット
+			// (なにか処理が必要)
+			// ArrayListにEmployeeオブジェクトをセット
+				code = rs.getInt("employee_no");				//社員コード
+				emp.setEmployee_code(code);						//Employee にセット
+
+				String name = rs.getString("employee_name");	//氏名
+				emp.setEmployee_name(name);
+
+				shozoku = rs.getInt("shozoku_code");			//ここでemployeeクラスから所属名を取り出す必要
+				shozokuName = rs.getString("shozoku_name");
+
+				// ここで所属コードをszkにセット
+				szk.setShozoku_code(shozoku);
+				szk.setShozoku_name(shozokuName);
+				// szkをEmployeeオブジェクト(emp)にセット
+//				emp.setShozoku_code(szk.getShozoku_code());		//所属コードを両クラス同じにする
+				emp.setShozoku(szk);
 
 
-			 rs.close();
-			 stmt.close();
+				int sex = rs.getInt("sex");					//性別
+				//性別の結び付け(数を文字へ)を実施する
+				Seibetu sei = Seibetu.getSeibetu(sex);
+				sexStr = sei.sname;								//性別が格納されている
+				emp.setSex(sexStr);
+
+
+				age = rs.getInt("age");							//年齢
+				emp.setAge(age);
+
+				birthday = rs.getDate("birthday");				//生年月日
+				emp.setBirthday(birthday);
+
+
+				shyain.add(emp);
+
+//				System.out.println(emp);
+			}
+
+			// ArrayListの中身をループで取り出して出力
+			for(Employee emp : shyain) {
+//				System.out.println(emp);
+				emp.aisatu();
+			}
+
+
+			//close()はfinally句
+
 
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
 		}
 //		System.out.println(conn);
 	}
+
+
+
 }
 
 
