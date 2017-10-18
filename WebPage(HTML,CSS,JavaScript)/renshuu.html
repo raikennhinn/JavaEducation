@@ -1,0 +1,161 @@
+<!-- HTMLタグについての説明 -->
+<!DOCTYPE html>
+<html lang="ja">
+	<!-- headタグを追加 
+	headタグの子要素としてmetaタグを追加、下のtitleタグを移動する -->
+	<head>
+		<meta charset="Shift_JIS"><!--JSPではここの文字コードしては「あまり」有効でない-->
+		<!--キャッシュの有効期限-->
+		<!--<meta http-equiv="Expires" content="-1">-->
+		<!--キャッシュ無効化-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<!-- IEのレンダリングモード指定　→画面表示-->
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<title>test</title>
+		<!-- styleタグを追加して、h1の文字を赤に設定 -->
+<!--		<style type="text/css">-->
+		<!--
+			h1{color:red;}	
+		-->
+<!--		</style>	-->
+		<!-- linkタグを追加して、cssファイルを読み込むようにする -->
+		<link rel="stylesheet" type="text/css" href="renshuu.css">
+	</head>
+	<body>
+		<div id="tableSpace">
+			<!-- 見出しを３段階つける-->
+			<h1>見出し1</h1>
+			<h2>見出し2</h2>
+			<h3>見出し3</h3>
+			<p class="label">こんにちは</p>
+		</div>
+		
+		<p id="test">初めてのJavaScript勉強中だよ！</p>
+		
+		<!-- ３行４列のテーブル（見出しあり）を表示する -->
+		<table border="1">
+			<tr>
+				<th>／</th>
+				<th>列１</th>
+				<th>列２</th>
+				<th>列３</th>
+				<th>列４</th>
+			</tr>
+			<tr>
+				<th>行１</th>
+				<td>1-1</td>
+				<td>1-2</td>
+				<td>1-3</td>
+				<td>1-4</td>
+			</tr>
+			<tr>
+				<th>行２</th>
+				<td>2-1</td>
+				<td>2-2</td>
+				<td>2-3</td>
+				<td>2-4</td>
+			</tr>
+			<tr>
+				<th>行３</th>
+				<td>3-1</td>
+				<td>3-2</td>
+				<td>3-3</td>
+				<td>3-4</td>
+			</tr>
+		</table>	
+		<!-- iOfficeへのリンクをはる（別ウインドウで表示させる -->
+		<a target="_blank" href= "http://ioffice.osa.ucom.co.jp">iOfficeへ</a>
+		<hr>
+		<!-- iframe（インラインフレーム）でframe2.htmlを表示する。表示サイズは適度に調整 -->
+		<br />
+		<iframe src = "frame2.html" frameborder="0" name = "frame2" width =70% height = 50% align = 60% hspace = 10 vspace = 10></iframe>
+		<br />
+		<!-- フォームタグの中に、テキストボックス、チェックボックス、ラジオボタン、
+		プルダウンメニュー、リストメニュー（呼び名が違うかも）、パスワード、テキストエリアを表示させる
+		テキストボックスは初期値が空のもの、初期値になにか入っているものをそれぞれ用意
+		チェックボックスは、チェックありのもの、なしのものをそれぞれ
+		ラジオボタンは複数表示、どれかひとつだけを選択できるように
+		プルダウンメニュ、リストメニューは複数の選択項目を表示
+		テキストエリアは最大入力文字数を設定 -->
+		<form>
+			<div>
+				<div style="margin:0px 0px 0px 0px;">テキストボックス:</div>
+				<span class="marginTest"> テキストボックス:</span>
+				<div>テキストボックス:</div>
+			</div>
+			<br />
+			<input type="text" name="テキストボックス１" size="50" />
+			<br />
+			<input type="text" name="テキストボックス２" size="50" value="最初から入っている文字" />
+			<br />
+			
+			チェックボックス:
+			<br />
+			<input type="checkbox" name="チェックボックス１" >初期状態チェックなし
+			<br />
+			<input type="checkbox" name="チェックボックス２" checked >初期状態チェックあり
+
+			<br />
+			ラジオボタン:
+			<br />
+			<input type="radio" name="suzi" value="1">1
+			<input type="radio" name="suzi" value="2" checked>2
+			<input type="radio" name="suzi" value="3">3
+			<input type="radio" name="suzi" value="4">4
+			<br />
+			
+			<br />
+			<div id="PullDownLabel">プル<span class="label">ダウン</span>メニュー:</div>
+			<br />
+			<select name = "石の名前">
+				<option value = "未選択">
+				<option value = "ガーネット">ガーネット
+				<option value = "アメジスト">アメジスト
+				<option value = "アクアマリン">アクアマリン
+				<option value = "ダイヤモンド">ダイヤモンド
+				<option value = "エメラルド">エメラルド
+			</select>
+			<br />
+			
+			<span id="PullDownLabel" class="label">リストメニュー？</span>:
+			<br />
+			<select name="文房具" size="8" multiple>
+				<option value="ノート">ノート
+				<option value="鉛筆">鉛筆
+				<option value="シャープペンシル">シャープペンシル
+				<option value="サインペン">サインペン
+				<option value="カラーペン">カラーペン
+				<option value="消しゴム">消しゴム
+				<option value="筆入れ">筆入れ
+				<option value="バインダー">バインダー
+				<option value="下敷き">下敷き
+				<option value="クリアファイル">クリアファイル
+			</select>
+			
+			
+			<br />
+			パスワード:
+			<br />
+			<input type="password" name="pass" size="8" maxlength="6">
+			<br />
+			
+			テキストエリア:
+			<br />
+			<textarea name="テキストエリア" rows="4" cols ="40" wrap="hard" maxlength="20">テキストエリアの場合、value属性ではなく、初期値はタグにはさみます。</textarea>
+			<br />
+			<!-- hiddenのinput項目をひとつ用意 -->
+			<p>hiddenを使用した項目
+			<input type="hidden" name="画面には表示されない項目" value="10"></p>
+			
+			<!-- ファイルアップデート用inputタグ -->
+			<p>ファイルアップデート用inputタグの使用</p>
+			<p><input type="file" name="update" size="30"></p>
+			
+			<!-- エスケープシーケンスを使って、複数空白を入れて -->&emsp;←この左に空白を入れました
+			<!-- エスケープシーケンスを使って、&や、タグ開始と終了<>を文字列として表示する -->
+			 <p>&lt;html&gt;タグを文字列として表示させました&lt;/html&gt;</p>
+			 <p>&amp;</p>
+		</form>
+	</body>
+	<script src="test.js"></script>
+</html>
