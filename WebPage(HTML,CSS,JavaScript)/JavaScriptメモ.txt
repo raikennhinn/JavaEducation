@@ -1,0 +1,27 @@
+2017年版、5分でわかるJavaScript入門(ES6対応版) 
+http://paiza.hatenablog.com/entry/javascript_intro
+
+JavaScript入門
+https://qiita.com/akiinu/items/5d1178fa1102b939cd71
+
+JavaScript チュートリアル
+http://memopad.bitter.jp/w3c/js/index.html
+
+とほほのJavaScriptリファレンス
+http://www.tohoho-web.com/js/index.htm
+
+JavaScript ガイド
+https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide
+
+
+【オブジェクトの定義と利用】
+function MessageInfo(message) {
+    this.message = message;
+}
+
+MessageInfo.prototype.alertMessage = function() {
+    console.log(this.message);
+}
+
+var msg1 = new MessageInfo("こんにちは！");
+msg1.alertMessage();

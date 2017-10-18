@@ -1,0 +1,39 @@
+
+JDBCを使ったSQLの実行方法
+http://www.ne.jp/asahi/hishidama/home/tech/java/jdbc.html
+
+JDBC4.0のドライバー登録方法
+http://www.ne.jp/asahi/hishidama/home/tech/java/DriverManager.html#JDBC4.0
+
+
+JDBC4.0（JDK1.6以降）では、Class.forName()を実行する必要は無くなった。
+
+JDBC4.0対応のJDBCライブラリー（jarファイル）では、META-INFの中にjava.sql.Driverというファイルが置かれている。
+この中にJDBCドライバー名が書かれており、DriverManagerが初めて使用される直前（getConnection()やgetDrivers()の呼び出しの最初の処理）で読み込まれてドライバークラスが初期化される。[/2009-04-14]
+したがってそこでドライバー登録の静的初期化子が実行され、DriverManagerに登録される。
+>jar -tf derby.jar | findstr java.sql.Driver
+META-INF/services/java.sql.Driver
+
+>jar -xf derby.jar META-INF/services/java.sql.Driver
+
+>type META-INF\services\java.sql.Driver
+org.apache.derby.jdbc.AutoloadedDriver		←JDBCドライバーのクラス名が書かれている
+
+JDBC3.0の方法と同様にClass.forName()等を実行してもよいのだが、上記の方法で既にクラスがロードされている為、静的初期化子はもう実行されない。
+ （つまり害は無いが意味も無い）
+
+※JDBC4.0では、java.sql.Driverファイルの中にクラス名を書き、そのクラスの静的初期化子でドライバーを登録するようコーディングする。（つまり、どちらかだけではダメで、両方必要）
+
+※なお、このjarファイル（java.sql.Driverファイル）の読み込みには、サービスプロバイダー機能が使われている。[2009-04-14
+
+
+
+
+
+
+参考：
+Class.forName で DB アクセスできるようになる理由
+http://d.hatena.ne.jp/spider-man/20080307/p1
+
+staticイニシャライザとは
+http://sjc-p.obx21.com/word/es/staticinitializer.html

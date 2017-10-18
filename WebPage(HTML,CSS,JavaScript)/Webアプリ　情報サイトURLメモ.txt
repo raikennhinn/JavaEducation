@@ -1,0 +1,9 @@
+
+JavaによるWebアプリケーション入門/HTTPプロトコル
+http://www.wakhok.ac.jp/~tomoharu/web2004/text/index_c3.html#doc1_doc3_HTTP:form2
+
+はじめてのサーバサイドJava  第８回：Cookieとセッション情報
+https://thinkit.co.jp/free/article/0604/7/8/
+
+ウェブプログラミングプライマー
+http://wp-p.info/
