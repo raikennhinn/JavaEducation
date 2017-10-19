@@ -1,0 +1,31 @@
+<!-- JavaScript　イベントハンドラ -->
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+      <meta charset="JIS-J">
+      <title>JavaScriptの練習</title>
+      <!--CSS記述-->
+      <style>
+  .myStyle {
+    font-weight: bold;
+    border: 1px solid gray;
+  }
+      </style>
+      <!--ここまで-->
+      
+      </head>
+  <body>
+   <h1>見出し</h1>
+   <p id="msg">こんにちは！</p> <!-- javascriptをいじるときはidをつける -->
+	<button id="add">Click!</button>
+</body>
+<script src="renpjs.js"></script>
+<script>
+	var msg = document.getElementById("msg").onclick = function() {
+		var greet = document.createElement('p'); 
+		var text = document.createTextNode('hello world');
+		document.body.appendChild(greet).appendChild(text);
+	};
+</script>
+</html>
+

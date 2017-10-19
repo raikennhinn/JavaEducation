@@ -1,1 +1,7 @@
 *.class
+.metadata/
+.recommenders/
+JavaEducation/
+RemoteSystemsTempFiles/
+Rensyuu_20171010/bin/
+Rensyuu_20171010/doc/

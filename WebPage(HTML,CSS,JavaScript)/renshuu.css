@@ -1,0 +1,61 @@
+/* カンマ区切りで複数のタグをセレクトできる */
+h1, h2 {
+	color:red;
+}
+
+form {
+	border:1px solid black;
+}
+
+/* 半角スペースで子要素をセレクトできる */
+table {
+	color:blue;
+	border-color:blue;
+}
+table tr {
+	color:gray;
+}
+table tr th {
+	font:bold 100% Arial;
+	color:green;
+}
+table tr td {
+	color:orange;
+}
+/* クラス属性でセレクトできる */
+.label {
+	text-shadow: 3px 3px 2px #000000;
+}
+
+/* 特定のタグのクラス属性をセレクト */
+span.label {
+	font-style:italic ! important;
+	margin:50px 50px 50px 50px;
+	
+}
+
+/* IDでセレクト(文書内にただ一つ) */
+#PullDownLabel {
+	font-weight:bold;
+	border: 1px solid gray;
+	padding:10px;
+	text-align:center;
+}
+
+/* positionプロパティほかで、要素の位置を指定 */
+#tableSpace {
+	width:600px;
+	height:300px;
+	position:relative;
+	left:100px;
+	top:100px;
+	background-color:gray;
+}
+
+/* margin、paddingなどで、要素間の隙間を指定
+ * displayで、ブロック要素＜＞インライン要素の切り替えが可能
+ */
+span.marginTest {
+	margin:30px 30px 30px 30px;
+	display:block;
+}
