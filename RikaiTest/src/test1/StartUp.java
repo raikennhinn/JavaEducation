@@ -88,7 +88,6 @@ public class StartUp {
 //			int num = stmt.executeUpdate(sql);
 			rs = stmt.executeQuery(sql);
 
-
 			//変数定義
 			int code =0;
 			int shozoku =0;
