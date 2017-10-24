@@ -96,7 +96,7 @@ public class EmployeeListServlet extends HttpServlet {
 				Shozoku szk = new Shozoku();					//Shozokuクラスのオブジェクトを生成
 
 				int code = rs.getInt("employee_no");				//社員コード
-				emp.setEmployee_code(code);						//Employee にセット
+				emp.setEmployee_no(code);						//Employee にセット
 
 
 				String name = rs.getString("employee_name");	//氏名

@@ -2,6 +2,8 @@ package webApplication.bean;
 
 import java.sql.Date;
 
+import webApplication.enumeration.Seibetu;
+
 public class Employee {
 	//変数
 	private int employee_code;		//社員コード
@@ -15,10 +17,10 @@ public class Employee {
 
 
 	//社員コードのゲッターとセッター
-	public int getEmployee_code() {
+	public int getEmployee_no() {
 		return employee_code;
 	}
-	public void setEmployee_code(int employee_code) {
+	public void setEmployee_no(int employee_code) {
 		this.employee_code = employee_code;
 	}
 //	//所属コードのゲッターとセッター
@@ -42,6 +44,13 @@ public class Employee {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
+
+	// 画面に出力するための性別ゲッター
+	public String getSexAtKanji() {
+		Seibetu sei = Seibetu.getSeibetu(Integer.parseInt(this.sex));
+		return sei.getName();
+	}
+
 	//年齢のゲッターとセッター
 	public int getAge() {
 		return age;
@@ -55,6 +64,11 @@ public class Employee {
 	}
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	// 画面に出力するための生年月日ゲッター
+	public String getBirthdayAtSlash() {
+		return this.birthday.toString().replace('-', '/');
 	}
 
 	//所属コードの結びつけゲッターとセッター
