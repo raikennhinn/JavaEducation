@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="WebApplication" default="makewar" basedir="." >
+
+	<property name="src" location="src"/>
+	<property name="build" location="build"/>
+
+	<target name="develop" description="開発ビルド">
+    	<javac srcdir="${src}" destdir="${build}"/>
+	</target>
+
+
+	<!-- warファイルの設定 -->
+	<property name="war.home" value="." />
+	<property name="web-app.name" value="WebApplication3" />
+
+	<!-- jarタスクによってwarファイルを作成 -->
+	<!--
+	<target name="makewar">
+		<jar destfile="${war.home}/${web-app.name}.war"  />
+	</target>
+	 -->
+
+	<target name="makewar">
+		<war destfile="${war.home}/${web-app.name}.war" webxml="${war.home}/WEB-INF/web.xml">
+			<fileset dir="${war.home}/" excludes="**/web.xml" />
+			<!-- ビルドしたclassファイルをWEB-INF/classesフォルダに配置 -->
+			<classes dir="${war.home}/WEB-INF/classes"/>
+		</war>
+	</target>
+
+</project>
