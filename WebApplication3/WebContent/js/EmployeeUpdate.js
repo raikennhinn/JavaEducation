@@ -27,11 +27,11 @@ function check(){
 	//氏名
 	var name = update_form.elements['name'];
 	var nameStr = "氏名";
-	if(Minyuryoku(name.value, nameStr)){
-		name.focus();
-		name.style.backgroundColor = ErrColor;
-		return;
-	}
+//	if(Minyuryoku(name.value, nameStr)){
+//		name.focus();
+//		name.style.backgroundColor = ErrColor;
+//		return;
+//	}
 	if(Ketasu(name.value, 8, nameStr)){
 		name.focus();
 		name.style.backgroundColor = ErrColor;
@@ -40,11 +40,11 @@ function check(){
 	//カナ氏名
 	var namekana = update_form.elements['namekana'];
 	var namekanaStr ="氏名カナ";
-	if(Minyuryoku(namekana.value, namekanaStr)){
-		namekana.focus();
-		namekana.style.backgroundColor = ErrColor;
-		return;
-	}
+//	if(Minyuryoku(namekana.value, namekanaStr)){
+//		namekana.focus();
+//		namekana.style.backgroundColor = ErrColor;
+//		return;
+//	}
 	if(Ketasu(namekana.value, 16, namekanaStr)){
 		namekana.focus();
 		namekana.style.backgroundColor = ErrColor;
@@ -74,11 +74,10 @@ function check(){
 	var birthday = update_form.elements['birthday'];
 	var birthLabel = "生年月日";
 	// 正規表現による日付チェック
-	if(hiduke(birthday.value, birthLabel, '[1-2][0-9]{3}/[0-1][0-9]/[0-3][0-9]')){
-		birthday.focus();
-		birthday.style.backgroundColor = ErrColor;
-		return;
-
+		if(hiduke(birthday.value, birthLabel, '[1-2][0-9]{3}/[0-1][0-9]/[0-3][0-9]')){
+			birthday.focus();
+			birthday.style.backgroundColor = ErrColor;
+			return;
 	}
 
 
@@ -106,7 +105,7 @@ function Minyuryoku(a,name,colorName) {
 // 桁数チェック関数を定義
 function Ketasu(a,i,name) {
 	if(a.length > i){
-		alert(name+":"+i+"桁までの数値を入力してください");
+		alert(name+":"+i+"桁まで入力できます");
 		return true;
 	}
 }
@@ -114,57 +113,65 @@ function Ketasu(a,i,name) {
 // 数字チェック関数を定義
 function Suzi(a,name) {
 	if(isNaN(parseInt(a))) {
-		alert(name+"には数値を入力してください");
-		return true;
+		if(a.length > 0){
+			alert(name+"には数値を入力してください");
+			return true;
+	}
 	}
 }
 
 // 日付チェック関数
 function hiduke(a, name, pattern) {
 	var regex = new RegExp(pattern, 'g');
-	// 正規表現チェックと、月日チェックが成功したときのみfalse（チェックOK)
-	if(regex.exec(a)) {
-		var month = parseInt(a.split('/')[1]);
-		var day = parseInt(a.split('/')[2]);
-		if(month >= 1 && month <= 12) {
-			switch (month) {
-				case 2:
-					if(day >= 1 && day <= 28) {
-						return false;
-					}
-					break;
-				case 4:
-				case 6:
-				case 9:
-				case 11:
-					if(day >= 1 && day <= 30) {
-						return false;
-					}
-					break;
-				default:
-					if(day >= 1 && day <= 31) {
-						return false;
-					}
-					break;
+	if(a.length > 0){
+		// 正規表現チェックと、月日チェックが成功したときのみfalse（チェックOK)
+		if(regex.exec(a)) {
+			var month = parseInt(a.split('/')[1]);
+			var day = parseInt(a.split('/')[2]);
+			if(month >= 1 && month <= 12) {
+				switch (month) {
+					case 2:
+						if(day >= 1 && day <= 28) {
+							return false;
+						}
+						break;
+					case 4:
+					case 6:
+					case 9:
+					case 11:
+						if(day >= 1 && day <= 30) {
+							return false;
+						}
+						break;
+					default:
+						if(day >= 1 && day <= 31) {
+							return false;
+						}
+						break;
+				}
 			}
 		}
+
+		// どちらかがダメならtrue（チェックNG）
+		alert(name+"には有効な日付を入力してください");
+		return true;
 	}
-	// どちらかがダメならtrue（チェックNG）
-	alert(name+"には有効な日付を入力してください");
-	return true;
 }
+
 
 // カナチェック関数
 function kana(a, name) {
 	a = (a == null) ? "" : a;
-	var reg = new RegExp(/^[ｦ-ﾟ]*$/);
-	if(a.match(/^[ァ-ヶー　]*$/)) {// 全角カナチェック
-		return false;
-	} else if(reg.test(a)) {// 半角カナチェック
-		return false;
-	} else {
-		alert(name + "にはカタカナを入力してください");
-		return true;
+	if(a.length > 0){
+		var reg = new RegExp(/^[ｦ-ﾟ]*$/);
+		if(a.match(/^[ァ-ヶー　]*$/)) {// 全角カナチェック
+			return false;
+		} else if(reg.test(a)) {// 半角カナチェック
+			return false;
+		} else {
+			alert(name + "にはカタカナを入力してください");
+			return true;
+		}
 	}
 }
 

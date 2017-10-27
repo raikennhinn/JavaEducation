@@ -1,5 +1,15 @@
 package webApplication.bean;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 public class Shozoku {
 	private int shozoku_code;		//所属コード
 	private String shozoku_bu;		//所属部
@@ -56,7 +66,65 @@ public class Shozoku {
 		System.out.println(shozoku_code +":"+ shozoku_bu +":"+shozoku_ka+":"+shozoku_kakari+":"+printName());
 
 	}
+	/**
+	 * DB接続を実施する
+	 * Employeeと同様
+	 * @return
+	 * @throws SQLException
+	 * @throws NamingException
+	 */
+	private static Connection conectionDB() throws SQLException, NamingException {
+		Connection conn = null;
+		Context context;
 
+		context = new InitialContext();
+		DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/WebApplication");
+		conn = ds.getConnection();
 
+		return conn;
+	}
 
+	/**
+	 * 入力された所属値が存在するかどうかのチェックを行う
+	 * 存在しない場合はfalse,正しい場合はtrueを返す
+	 * @param shozoku_code
+	 * @return
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	public static boolean  checkCode(int shozoku_code) throws SQLException, NamingException{
+		//DB接続
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try{
+			conn = conectionDB();
+			//shozokuオブジェクトの生成
+			Shozoku szk = new Shozoku();
+			//SQL
+			StringBuilder stb2 = new StringBuilder();
+			stb2.append("SELECT ");
+			stb2.append("shozoku_code ");
+			stb2.append("FROM shozoku ");
+			stb2.append("WHERE shozoku_code = ? ");
+			stb2.append("ORDER BY shozoku_code");
+			String codeSelect = stb2.toString();
+			ps = conn.prepareStatement(codeSelect);
+			ps.setInt(1, szk.getShozoku_code());
+			rs = ps.executeQuery();
+
+			if(rs.next() == false) {
+
+				return false;
+			}
+
+			return true;
+
+		}finally {
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+	}
 }
