@@ -2,6 +2,7 @@ package webApplication.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import webApplication.bean.Employee;
+import webApplication.util.MessegeUtility;
 
 public class EmployeeUpdateInitServlet extends HttpServlet {
 
@@ -43,8 +45,18 @@ public class EmployeeUpdateInitServlet extends HttpServlet {
 
 
 			//メッセージ情報の取得
+			HashMap<String, String> mes =
+					MessegeUtility.message2(
+							"ECOMMON01",
+							"ECOMMON02",
+							"ECOMMON03",
+							"ECOMMON04",
+							"ECOMMON06"
+							);
+
 			//アトリビュートにセット
 			req.setAttribute("emp", emp);
+			req.setAttribute("mesMap", mes);
 
 
 			//更新画面へ返す

@@ -100,8 +100,7 @@ public class Shozoku {
 
 		try{
 			conn = conectionDB();
-			//shozokuオブジェクトの生成
-			Shozoku szk = new Shozoku();
+
 			//SQL
 			StringBuilder stb2 = new StringBuilder();
 			stb2.append("SELECT ");
@@ -111,7 +110,7 @@ public class Shozoku {
 			stb2.append("ORDER BY shozoku_code");
 			String codeSelect = stb2.toString();
 			ps = conn.prepareStatement(codeSelect);
-			ps.setInt(1, szk.getShozoku_code());
+			ps.setInt(1, shozoku_code);
 			rs = ps.executeQuery();
 
 			if(rs.next() == false) {

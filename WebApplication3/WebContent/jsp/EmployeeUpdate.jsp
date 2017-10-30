@@ -9,9 +9,118 @@
 	<title>従業員更新</title>
 	<!-- Css使用 -->
 	<link rel="stylesheet" type="text/css" href="../css/webApplication.css">
+
+	<!-- メッセージMapをリクエストから取得 -->
+	<c:set var="mesMap" value="${requestScope['mesMap']}" />
+	<c:set var="mes_minyuryoku" value="${mesMap['ECOMMON01']}" />
+	<c:set var="mes_ketasu" value="${mesMap['ECOMMON02']}" />
+	<c:set var="mes_suji" value="${mesMap['ECOMMON03']}" />
+	<c:set var="mes_hiduke" value="${mesMap['ECOMMON04']}" />
+	<c:set var="mes_katakana" value="${mesMap['ECOMMON06']}" />
+
+	<script>
+		function checkInput(){
+			//カラーコード変数
+			var ErrColor="#ff5555";
+
+			//各項目のチェック実施
+			var update_form = document.forms['update'];
+			//所属コード
+			var sh_code = update_form.elements['shozoku_code'];
+			var sh_codeLabel = "所属コード";
+	//		var sh_colorName ='shozoku_code';
+			if(Minyuryoku(sh_code.value, sh_codeLabel, "${mes_minyuryoku}")) {
+				sh_code.focus();
+				sh_code.style.backgroundColor = ErrColor;
+				return;
+			}
+			if(Ketasu(sh_code.value, 3, sh_codeLabel, "${mes_ketasu}")){
+				sh_code.focus();
+				sh_code.style.backgroundColor = ErrColor;
+				return;
+			}
+			if(Suzi(sh_code.value, sh_codeLabel, "${mes_suji}")){
+				sh_code.focus();
+				sh_code.style.backgroundColor = ErrColor;
+				return;
+			}
+
+			//氏名
+			var name = update_form.elements['name'];
+			var nameStr = "氏名";
+	//		if(Minyuryoku(name.value, nameStr)){
+	//			name.focus();
+	//			name.style.backgroundColor = ErrColor;
+	//			return;
+	//		}
+			if(Ketasu(name.value, 8, nameStr, "${mes_ketasu}")){
+				name.focus();
+				name.style.backgroundColor = ErrColor;
+				return;
+			}
+			//カナ氏名
+			var namekana = update_form.elements['namekana'];
+			var namekanaStr ="氏名カナ";
+	//		if(Minyuryoku(namekana.value, namekanaStr)){
+	//			namekana.focus();
+	//			namekana.style.backgroundColor = ErrColor;
+	//			return;
+	//		}
+			if(Ketasu(namekana.value, 16, namekanaStr, "${mes_ketasu}")){
+				namekana.focus();
+				namekana.style.backgroundColor = ErrColor;
+				return;
+			}
+			if(kana(namekana.value, namekanaStr, "${mes_katakana}")){
+				namekana.focus();
+				namekana.style.backgroundColor = ErrColor;
+				return;
+			}
+
+			//年齢
+			var age = update_form.elements['age'];
+			var ageStr = "年齢";
+			if(Ketasu(age.value, 2, ageStr, "${mes_ketasu}")){
+				age.focus();
+				age.style.backgroundColor = ErrColor;
+				return;
+			}
+			if(Suzi(age.value, ageStr, "${mes_suji}")){
+				age.focus();
+				age.style.backgroundColor = ErrColor;
+				return;
+			}
+
+			//生年月日
+			var birthday = update_form.elements['birthday'];
+			var birthLabel = "生年月日";
+			// 正規表現による日付チェック
+				if(hiduke(birthday.value, birthLabel, '[1-2][0-9]{3}/[0-1][0-9]/[0-3][0-9]', "${mes_hiduke}")){
+					birthday.focus();
+					birthday.style.backgroundColor = ErrColor;
+					return;
+			}
+
+
+			// 実行確認
+			var res = confirm("この内容で登録してもよいですか？");
+			if(res){
+				// サーバーにリクエストを送信
+				update_form.submit();
+			}
+		}
+	</script>
 </head>
 <body onLoad="document.update.shozoku_code.focus()">
 	<h1>従業員更新</h1>
+	<c:set var="flg" value="${requestScope['flg']}" />
+	<c:if test="${flg}">
+		<p>${requestScope['mes']}</p>
+	</c:if>
+	<c:if test="${!flg}">
+		<p id="error_msg">${requestScope['mes']}</p>
+	</c:if>
+
 	<!-- 一覧から取得したコードのひとつが入る→URLに直接入力したものを入れる -->
 	<!-- formタグを使用し、各データのテキストボックスを記述 -->
 	<!-- 初期値（社員コードを元にひっぱってきたデータを表示する） -->
@@ -59,11 +168,10 @@
 	<p><input type="hidden" name="employee_no" value="${emp.employee_no}" ></p>
 
 	<!-- 登録と取り消しボタン -->
-	<p><input type="button" value=" 登録 " onclick="check()">
+	<p><input type="button" value=" 登録 " onclick="checkInput()">
 	<input type="reset" name="リセット" value=" 取消 "  onclick="ColorRiset()"></p>
 	</form>
 </body>
 	<!-- JavaScriptを指定 -->
-	<script src="../js/EmployeeUpdate.js" type="text/javascript">
-	</script>
+	<script src="../js/EmployeeUpdate.js" type="text/javascript"></script>
 </html>

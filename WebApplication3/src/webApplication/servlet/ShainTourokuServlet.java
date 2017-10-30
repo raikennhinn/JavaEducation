@@ -181,7 +181,7 @@ public class ShainTourokuServlet extends HttpServlet {
 			}
 
 			// TODO 更新結果画面jspへの遷移
-			this.getServletContext().getRequestDispatcher("/jsp/shainTourokuKekka.jsp").
+			this.getServletContext().getRequestDispatcher("/jsp/shainHenkouKekka.jsp").
 			forward(req, resp);
 
 		} catch (SQLException e) {
