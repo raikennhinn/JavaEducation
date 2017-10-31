@@ -20,11 +20,32 @@
 	</target>
 	 -->
 
+	<property name="buildForWar" location="../build"/>
+	<property name="db-host-local" value="localhost"/>
+	<property name="db-user-local" value="rikai"/>
+	<property name="db-host-server" value="192.168.20.32"/>
+	<property name="db-user-server" value="hirata"/>
+
+	<!-- ローカルでテストするときにDB接続先をローカルホストに書き換える -->
+	<target name="localtest">
+		<!-- context.xmlのDB接続先HOSTを置換する -->
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(jdbc:mysql://).*.(/sampledb040)" byline="true" replace="\1${db-host-local}\2"/>
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(username=&quot;).*.(&quot;)" byline="true" replace="\1${db-user-local}\2"/>
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(password=&quot;).*.(&quot;)" byline="true" replace="\1${db-user-local}\2"/>
+	</target>
+
+	<!-- サーバーデプロイ用のwarを作成する。DB接続先をサーバー用に書き換える -->
 	<target name="makewar">
+		<!-- 既存のwarを削除 -->
+		<delete file="${war.home}/${web-app.name}.war" />
+		<!-- context.xmlのDB接続先HOSTを置換する -->
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(jdbc:mysql://).*.(/sampledb040)" byline="true" replace="\1${db-host-server}\2"/>
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(username=&quot;).*.(&quot;)" byline="true" replace="\1${db-user-server}\2"/>
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(password=&quot;).*.(&quot;)" byline="true" replace="\1${db-user-server}\2"/>
 		<war destfile="${war.home}/${web-app.name}.war" webxml="${war.home}/WEB-INF/web.xml">
 			<fileset dir="${war.home}/" excludes="**/web.xml" />
 			<!-- ビルドしたclassファイルをWEB-INF/classesフォルダに配置 -->
-			<classes dir="${war.home}/WEB-INF/classes"/>
+			<classes dir="${buildForWar}"/>
 		</war>
 	</target>
 

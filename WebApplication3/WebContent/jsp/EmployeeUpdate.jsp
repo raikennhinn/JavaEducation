@@ -129,9 +129,17 @@
 
 	<form name="update" target="_self" method="POST" action="../EmployeeUpdate/">
 	<p>従業員No：<label > ${emp.employee_no} </label></p>
-	<p>所属コード:<input type="text" style="ime-mode:disabled;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}"></p>
-	<p>氏名:<input type="text" name="name" size="8" value="${emp.employee_name}"></p>
-	<p>氏名カナ：<input type="text" name="namekana" size="16" value="${emp.employee_namekana}"></p>
+	<c:if test="${flg}">
+		<!--  flgが0だった場合何もしない-->
+		<p>所属コード:<input type="text" style="ime-mode:disabled;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}"></p>
+	</c:if>
+	<c:if test="${!flg}">
+		<!--  flgが1だった場合何もしない-->
+		<p>所属コード:<input type="text" style="ime-mode:disabled; background-color:#ff5555;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}" ></p>
+	</c:if>
+
+	<p>氏名:<input type="text" maxlength="30" name="name" size="16" value="${emp.employee_name}"></p>
+	<p>氏名カナ：<input type="text" maxlength="60" name="namekana" size="30" value="${emp.employee_namekana}"></p>
 			<p>性別:
 		<c:set var="sex" value="${emp.sex}" />
 		<!-- sexが空（null？）なら、もしくはempが空（null？）なら、男を選択された状態でラジオボタンを表示 -->
@@ -153,10 +161,10 @@
 
 	<p>年齢:
 	<c:if test="${emp.age==-1}">
-		<input type="text" name="age" size="3" value="">
+		<input type="text" style="ime-mode:disabled;" maxlength="2" name="age" size="3" value="">
 	</c:if>
 	<c:if test="${emp.age!=-1}">
-		<input type="text" name="age" size="3" value="${emp.age}">
+		<input type="text" style="ime-mode:disabled;" maxlength="2" name="age" size="3" value="${emp.age}">
 	</c:if>
 	</p>
 	<p>生年月日:<input type="text" name="birthday" size="10" value="${emp.birthdayAtSlash}"></p>

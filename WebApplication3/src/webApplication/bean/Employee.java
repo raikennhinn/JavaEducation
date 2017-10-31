@@ -373,7 +373,9 @@ public class Employee {
 			inempUpdate.append(" employee_name_kana = ?, ");
 			inempUpdate.append(" sex = ?, ");
 			inempUpdate.append(" age = ?, ");
-			inempUpdate.append(" birthday = ? ");
+			inempUpdate.append(" birthday = ?, ");
+			inempUpdate.append(" update_user = ?, ");
+			inempUpdate.append(" update_datetime = NOW() ");
 			inempUpdate.append(" WHERE employee_no = ?;");
 			//文字列をSQLとしてまとめる
 			String sql = inempUpdate.toString();
@@ -395,7 +397,10 @@ public class Employee {
 			}else {
 				ps.setDate(7, this.birthday);
 			}
-			ps.setInt(8, this.employee_no);
+
+			ps.setString(8, "更新者");	// 将来的にはログインユーザ名
+
+			ps.setInt(9, this.employee_no);
 			//実行と同時にupdateに値を入れる
 			update = ps.executeUpdate();
 

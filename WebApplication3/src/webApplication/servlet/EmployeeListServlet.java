@@ -3,12 +3,12 @@ package webApplication.servlet;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import webApplication.bean.Employee;
 import webApplication.bean.Shozoku;
 import webApplication.enumeration.Seibetu;
+import webApplication.util.DataBaseUtility;
 
 
 
@@ -36,21 +37,21 @@ public class EmployeeListServlet extends HttpServlet {
 		 */
 		//必要変数の用意
 		Connection conn = null;
-		String user = "rikai";
-		String pass = "rikai";
-		String url ="jdbc:mysql://localhost/sampledb040";
+//		String user = "rikai";
+//		String pass = "rikai";
+//		String url ="jdbc:mysql://localhost/sampledb040";
 		Statement stmt =null;
 		ResultSet rs = null;
 
-		try {
-			Class.forName("org.gjt.mm.mysql.Driver");
-		} catch (ClassNotFoundException e2) {
-			e2.printStackTrace();
-		}
+//		try {
+//			Class.forName("org.gjt.mm.mysql.Driver");
+//		} catch (ClassNotFoundException e2) {
+//			e2.printStackTrace();
+//		}
 
 		//接続
 		try {
-			conn = DriverManager.getConnection(url, user, pass);
+			conn = DataBaseUtility.conectionDB();
 			stmt = conn.createStatement();
 
 
@@ -146,7 +147,7 @@ public class EmployeeListServlet extends HttpServlet {
 			this.getServletContext().getRequestDispatcher("/jsp/employeeList.jsp").
 			forward(req, resp);
 
-			} catch (SQLException e) {
+			} catch (SQLException | NamingException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}finally {

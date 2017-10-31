@@ -54,7 +54,10 @@ public class EmployeeUpdateInitServlet extends HttpServlet {
 							"ECOMMON06"
 							);
 
+
+
 			//アトリビュートにセット
+			req.setAttribute("flg",true);
 			req.setAttribute("emp", emp);
 			req.setAttribute("mesMap", mes);
 

@@ -3,7 +3,7 @@
 
 
 //以下functionはshainTouroku.jsと同文
-function Minyuryoku(a,name,colorName, mes) {
+function Minyuryoku(a,name,mes) {
 	if(a == ''){
 		alert(name + mes);
 //				return 1;
@@ -104,4 +104,16 @@ function ColorRiset(){
 
 	var birthday = f.elements['birthday'];
 	birthday.style.backgroundColor = "";
+}
+
+
+function ErrColoChange(){
+	//カラーコード変数
+	var ErrColor="#ff5555";
+
+	var f = document.forms['update'];
+	var code =f.elements['shozoku_code'];
+
+	code.style.backgroundColor = ErrColor;
+
 }
