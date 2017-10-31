@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context displayName="JavaEducation" docBase="WebApplication3" path="/WebApplication3">
+	<Resource name="jdbc/WebApplication" auth="Container"
+	type="javax.sql.DataSource"
+	username="rikai"
+	password="rikai"
+	driverClassName="org.gjt.mm.mysql.Driver" url="jdbc:mysql://localhost/sampledb040"
+	maxActive="4" maxWait="5000" maxIdle="2"
+	validationQuery="SELECT COUNT(employee_no) FROM employee" />
+</Context>
