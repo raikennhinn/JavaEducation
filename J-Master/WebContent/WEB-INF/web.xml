@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>J-Master</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+
+
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>webApplication.filter.EncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+  </filter-mapping>
+
+  <error-page>
+  	<exception-type>java.lang.Exception</exception-type>
+  	<location>/ErrorServlet/</location>
+  </error-page>
+
+  <servlet>
+    <servlet-name>ErrorServlet</servlet-name>
+    <servlet-class>webApplication.servlet.ErrorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ErrorServlet</servlet-name>
+    <url-pattern>/ErrorServlet/</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>EmployeeList</servlet-name>
+    <servlet-class>webApplication.servlet.EmployeeListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmployeeList</servlet-name>
+    <url-pattern>/EmployeeList/</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ShozokuList</servlet-name>
+    <servlet-class>webApplication.servlet.ShozokuListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShozokuList</servlet-name>
+    <url-pattern>/ShozokuList/</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ShainTourokuInit</servlet-name>
+    <servlet-class>webApplication.servlet.ShainTourokuInitServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShainTourokuInit</servlet-name>
+    <url-pattern>/shainTourokuInit/</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ShainTouroku</servlet-name>
+    <servlet-class>webApplication.servlet.ShainTourokuServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShainTouroku</servlet-name>
+    <url-pattern>/shainTouroku/</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>EmployeeUpdateInit</servlet-name>
+    <servlet-class>webApplication.servlet.EmployeeUpdateInitServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmployeeUpdateInit</servlet-name>
+    <url-pattern>/EmployeeUpdateInit/</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>EmployeeUpdate</servlet-name>
+    <servlet-class>webApplication.servlet.EmployeeUpdateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmployeeUpdate</servlet-name>
+    <url-pattern>/EmployeeUpdate/</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>UserLoginInit</servlet-name>
+    <servlet-class>webApplication.servlet.UserLoginInitServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserLoginInit</servlet-name>
+    <url-pattern>/UserLoginInit/</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>UserLogin</servlet-name>
+    <servlet-class>webApplication.servlet.UserLoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserLogin</servlet-name>
+    <url-pattern>/UserLogin/</url-pattern>
+  </servlet-mapping>
+
+    <servlet>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>webApplication.servlet.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/Logout/</url-pattern>
+  </servlet-mapping>
+
+
+<servlet>
+    <servlet-name>EmployeeDelete</servlet-name>
+    <servlet-class>webApplication.servlet.EmployeeDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmployeeDelete</servlet-name>
+    <url-pattern>/EmployeeDelete/</url-pattern>
+  </servlet-mapping>
+
+
+<servlet>
+    <servlet-name>ReturnMenu</servlet-name>
+    <servlet-class>webApplication.servlet.ReturnMenuServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReturnMenu</servlet-name>
+    <url-pattern>/ReturnMenu/</url-pattern>
+  </servlet-mapping>
+
+
+
+</web-app>

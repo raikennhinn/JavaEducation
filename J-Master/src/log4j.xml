@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+-->
+<!DOCTYPE log4j:configuration PUBLIC "-//Apache Software Foundation//DTD Log4J Configuration 1.0//EN"
+"http://renga.googlecode.com/svn-history/r4/vendor/logging-log4j-1.2.14/docs/api/org/apache/log4j/xml/log4j.dtd">
+<log4j:configuration>
+
+   <appender name="console" class="org.apache.log4j.ConsoleAppender">
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d [%t] %-5p %l - %m%n" />
+      </layout>
+   </appender>
+
+   <appender name="file" class="org.apache.log4j.RollingFileAppender">
+      <param name="File" value="/J-Master_log/J-Master.log" />
+      <param name="Encoding" value="UTF-8" />
+      <param name="MaxFileSize" value="1MB" />
+      <param name="MaxBackupIndex" value="10" />
+      <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d [%t] %-5p %l - %m%n" />
+      </layout>
+   </appender>
+
+   <logger name="webApplication">
+         <level value="DEBUG" />
+         <appender-ref ref="console"/>
+         <appender-ref ref="file"/>
+   </logger>
+
+</log4j:configuration>

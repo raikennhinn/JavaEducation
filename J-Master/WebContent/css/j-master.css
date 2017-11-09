@@ -1,0 +1,26 @@
+﻿@CHARSET "UTF-8";
+body {
+	font-family: "Meiryo","ＭＳ Ｐゴシック",sans-serif;
+}
+p.input {
+	height:20px;
+}
+span.inputLabel {
+	width:70px;
+}
+span.input {
+	position:relative;
+	left:10px;
+}
+#header_field {
+	float:left;
+	width:150px;
+	height:450px;
+	border-right: 2px solid #777777;
+	margin-right: 10px;
+}
+#main_field {
+	width:1000px;
+	height:450px;
+}
+
