@@ -2,6 +2,10 @@
 body {
 	font-family: "Meiryo","ＭＳ Ｐゴシック",sans-serif;
 }
+h1{
+	text-align	:	center;
+	color		:	blue;
+}
 p.input {
 	height:20px;
 }
@@ -11,6 +15,12 @@ span.inputLabel {
 span.input {
 	position:relative;
 	left:10px;
+}
+th {
+	font-size: 10pt;
+}
+#error_msg {
+	color	:red;
 }
 #header_field {
 	float:left;
@@ -22,5 +32,35 @@ span.input {
 #main_field {
 	width:1000px;
 	height:450px;
+}
+
+#sclber{
+	width: 830px;
+	height: 300px;
+	overflow-y: scroll;
+}
+/*全体のエリア*/
+#all_area {
+	width:820px;
+}
+
+/*固定するタイトル*/
+#title{
+	width: 800px;
+	table-layout: fixed;
+}
+
+/*データ部分でのスクロール*/
+#scroll_box {
+	width: 820px;
+	height: 280px;
+	overflow-x: hidden; /* 横スクロール非表示 */
+	overflow-y: scroll; /* 縦スクロール */
+}
+
+
+#data{
+	width: 800px;
+	table-layout: fixed;
 }
 

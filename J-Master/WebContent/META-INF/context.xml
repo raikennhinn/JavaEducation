@@ -3,9 +3,9 @@
 <Context displayName="J-Master" docBase="J-Master" path="/J-Master">
 	<Resource name="jdbc/WebApplication" auth="Container"
 	type="javax.sql.DataSource"
-	username="hirata"
-	password="hirata"
-	driverClassName="org.gjt.mm.mysql.Driver" url="jdbc:mysql://192.168.20.32/sampledb040"
+	username="rikai"
+	password="rikai"
+	driverClassName="org.gjt.mm.mysql.Driver" url="jdbc:mysql://localhost/sampledb040"
 	maxActive="4" maxWait="5000" maxIdle="2"
 	validationQuery="SELECT COUNT(employee_no) FROM employee" />
 </Context>

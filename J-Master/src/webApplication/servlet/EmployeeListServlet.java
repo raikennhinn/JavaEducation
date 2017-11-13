@@ -148,6 +148,7 @@ public class EmployeeListServlet extends CommonServlet{
 			try {
 				rs.close();
 				stmt.close();
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				for(StackTraceElement ste : e.getStackTrace()) {
