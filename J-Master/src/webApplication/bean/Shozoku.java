@@ -15,6 +15,7 @@ public class Shozoku {
 	private String shozoku_ka;		//所属課
 	private String shozoku_kakari;	//所属係り
 	private String shozoku_name; 	//所属名
+	private String shozoku_leader;  //所属長
 
 	//所属コードのゲッターとセッター
 	public int getShozoku_code() {
@@ -66,6 +67,12 @@ public class Shozoku {
 
 	}
 
+	public String getShozoku_leader() {
+		return shozoku_leader;
+	}
+	public void setShozoku_leader(String shozoku_leader) {
+		this.shozoku_leader = shozoku_leader;
+	}
 	/**
 	 * 入力された所属値が存在するかどうかのチェックを行う
 	 * 存在しない場合はfalse,正しい場合はtrueを返す
@@ -101,6 +108,53 @@ public class Shozoku {
 			}
 
 			return true;
+
+		}finally {
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+	}
+
+	public Shozoku shozokuDeta(int ShozokuCode) throws SQLException, NamingException {
+		//DB接続
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		//リターンで返すための所属情報を詰める所属オブジェクトの生成
+		Shozoku shozoku = new Shozoku();
+		try{
+			conn = DataBaseUtility.conectionDB();
+
+			//SQL
+			StringBuilder sb = new StringBuilder();
+			sb.append(" SELECT SHOZOKU_CODE, ");
+			sb.append(" SHOZOKU_BU, ");
+			sb.append(" SHOZOKU_KA, ");
+			sb.append(" SHOZOKU_KAKARI ");
+			sb.append(" FROM shozoku ");
+			sb.append(" WHERE SHOZOKU_CODE = ?");
+			//?に引数として受け取ったコードを入れる
+			String code = sb.toString();
+			ps = conn.prepareStatement(code);
+			ps.setInt(1, ShozokuCode);
+			//SQLの実行
+			rs = ps.executeQuery();
+
+			//SQLで取得してきた値を各項目に入れる
+			while(rs.next()) {
+				//引数の所属コードをShozokuクラスの所属コードへセット
+				shozoku.setShozoku_code(ShozokuCode);
+				//所属部の取得とセット
+				shozoku.setShozoku_bu(rs.getString("SHOZOKU_BU"));
+				//所属課の取得とセット
+				shozoku.setShozoku_ka(rs.getString("SHOZOKU_KA"));
+				//所属係りの取得とセット
+				shozoku.setShozoku_kakari(rs.getString("SHOZOKU_KAKARI"));
+			}
+			//所属コードを元に検索を行い、得た情報が入っているshozokuを返す
+			return shozoku;
 
 		}finally {
 			rs.close();

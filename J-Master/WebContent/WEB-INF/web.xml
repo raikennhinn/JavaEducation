@@ -44,7 +44,7 @@
 
   <servlet>
     <servlet-name>EmployeeList</servlet-name>
-    <servlet-class>webApplication.servlet.EmployeeListServlet</servlet-class>
+    <servlet-class>webApplication.servlet.EmployeeListInitialDisplayServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>EmployeeList</servlet-name>
@@ -137,5 +137,44 @@
     <servlet-name>ReturnMenu</servlet-name>
     <url-pattern>/ReturnMenu/</url-pattern>
   </servlet-mapping>
+
+<servlet>
+    <servlet-name>EmployeeListPager</servlet-name>
+    <servlet-class>webApplication.servlet.EmployeeListPagerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmployeeListPager</servlet-name>
+    <url-pattern>/EmployeeListPager/</url-pattern>
+  </servlet-mapping>
+
+<servlet>
+    <servlet-name>Sort</servlet-name>
+    <servlet-class>webApplication.servlet.SortServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Sort</servlet-name>
+    <url-pattern>/Sort/</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ShozokuData</servlet-name>
+    <servlet-class>webApplication.servlet.ShozokuDataServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShozokuData</servlet-name>
+    <url-pattern>/ShozokuData/</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+   <servlet-name>ShozokuLeaderSelect</servlet-name>
+   <servlet-class>webApplication.servlet.ShozokuLeaderSelectServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShozokuLeaderSelect</servlet-name>
+    <url-pattern>/ShozokuLeaderSelect/</url-pattern>
+  </servlet-mapping>
+
+
 
 </web-app>

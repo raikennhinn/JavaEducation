@@ -39,7 +39,7 @@ public class EmployeeDeleteServlet extends CommonServlet {
 			}else {
 				//失敗した
 				req.setAttribute("mes",  MessegeUtility.message1("E100001"));
-				req.setAttribute("flg",true);
+				req.setAttribute("flg",false);
 				logger.info("削除処理失敗");
 			}
 

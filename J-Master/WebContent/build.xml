@@ -47,6 +47,10 @@
 			<!-- ビルドしたclassファイルをWEB-INF/classesフォルダに配置 -->
 			<classes dir="${buildForWar}"/>
 		</war>
+		<!-- context.xmlのDB接続先HOSTを元のローカル設定に戻す -->
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(jdbc:mysql://).*.(/sampledb040)" byline="true" replace="\1${db-host-local}\2"/>
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(username=&quot;).*.(&quot;)" byline="true" replace="\1${db-user-local}\2"/>
+		<replaceregexp file="${war.home}/META-INF/context.xml" match="(password=&quot;).*.(&quot;)" byline="true" replace="\1${db-user-local}\2"/>
 	</target>
 
 </project>

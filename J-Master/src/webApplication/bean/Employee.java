@@ -5,8 +5,15 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.naming.NamingException;
+
+import org.apache.log4j.Logger;
 
 import webApplication.enumeration.Seibetu;
 import webApplication.util.DataBaseUtility;
@@ -113,7 +120,7 @@ public class Employee {
 	 * @throws SQLException
 	 * @throws NamingException
 	 */
-	public void setEmployeeDataByDB(String employee_no) throws SQLException, NamingException {
+	public void setEmployeeDataByDB(String employee_no, Logger logger) throws SQLException, NamingException {
 
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -136,6 +143,9 @@ public class Employee {
 
 			//文字列へ
 			String select = sb.toString();
+
+			logger.debug("従業員情報単一検索SQL：" + select);
+
 			//？に取得してきた従業員Noをセットし、実行
 			ps = conn.prepareStatement(select);
 			ps.setInt(1,Integer.parseInt(employee_no));
@@ -187,7 +197,7 @@ public class Employee {
 	 * @throws NamingException
 	 * @throws SQLException
 	 */
-	public static Employee getEmployeeData(String employee_no) throws SQLException, NamingException {
+	public static Employee getEmployeeData(String employee_no, Logger logger) throws SQLException, NamingException {
 
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -210,6 +220,8 @@ public class Employee {
 
 			//文字列へ
 			String select = sb.toString();
+			logger.debug("従業員情報単一検索SQL：" + select);
+
 			//？に取得してきた従業員Noをセットし、実行
 			ps = conn.prepareStatement(select);
 			ps.setInt(1,Integer.parseInt(employee_no));
@@ -558,4 +570,301 @@ public class Employee {
 		}
 	}
 
+	/**
+	 * 所属コードを元に従業員情報を返す
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	public static ArrayList<Employee> getEmployeeShozokuCode(int shozokuCode, Logger logger) throws SQLException, NamingException {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			//DBへの接続実施
+			conn = DataBaseUtility.conectionDB();
+
+			//SQLで所属コードを条件とし情報の取得を実施
+			StringBuilder sb = new StringBuilder();
+			sb.append(" SELECT employee_no, ");
+			sb.append(" shozoku_code, ");
+			sb.append(" employee_name ");
+			sb.append(" FROM employee ");
+			sb.append(" WHERE shozoku_code = ? ");
+
+			//文字列へ
+			String select = sb.toString();
+
+			logger.debug("従業員情報所属単位の検索SQL：" + select);
+
+			//？に取得してきた従業員Noをセットし、実行
+			ps = conn.prepareStatement(select);
+			ps.setInt(1,shozokuCode);
+			rs = ps.executeQuery();
+
+			ArrayList<Employee> empList = new ArrayList<Employee>();
+
+			while(rs.next()) {
+				//employeeオブジェクトの作成
+				Employee emp = new Employee();
+				//従業員No のセット
+				emp.setEmployee_no(rs.getInt("employee_no"));
+
+				//Shozokuオブジェクトを作成
+				Shozoku szk = new Shozoku();
+				//所属コードをemployeeオブジェクトを介して所属オブジェクトにつめる
+				szk.setShozoku_code(shozokuCode);
+				emp.setShozoku(szk);	//empのShozokuにセット
+
+				//氏名
+				emp.setEmployee_name(rs.getString("employee_name"));
+
+				empList.add(emp);
+
+			}
+
+			//従業員情報各種を返す
+			return empList;
+
+		} finally {
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+	}
+
+	//	【Employeeクラス】
+	//	・クラスメソッドとして、Employeeのリストのソートメソッドを実装する
+	//  用いてCollections.sort()を実行する。
+	public static void EmployeeSort(List<Employee> employeeList,String category,int b) {
+		//aは項目名、ｂは昇順か降順か。名前変更
+		//サーブレットからパラメータで受け取ったソート項目・昇順or降順にしたがって、必要なComparatorクラスを
+		//Comparetorの識別、
+		//b →trueが昇順、falseが降順
+		Comparator<Employee> comp= null;
+		switch (category){
+			case "employeeNo":
+				if(b == 1) {
+					comp = new ComparatorUpEmployee_no();
+				}else if(b ==2){
+					comp = new ComparatorDownEmployee_no();
+				}
+				break;
+			case "shozokuName":
+				if(b == 1) {
+					comp = new ComparatorUpShozokuName();
+				}else if(b == 2){
+					comp = new ComparatorDownShozokuName();
+				}
+				break;
+			case "name":
+				if(b == 1) {
+					comp = new ComparatorUpName();
+				}else if(b == 2){
+					comp = new ComparatorDownName();
+				}
+				break;
+			case "sex":
+				if(b == 1) {
+					comp = new ComparatorUpSex();
+				}else if(b == 2){
+					comp = new ComparatorDownSex();
+				}
+				break;
+			case "age":
+				if(b == 1) {
+					comp = new ComparatorUpaAge();
+				}else if(b == 2){
+					comp = new ComparatorDownaAge();
+				}
+				break;
+			case "birthday":
+				if(b == 1) {
+					comp = new ComparatorUpBirthday();
+				}else if(b == 2){
+					comp = new ComparatorDownBirthday();
+				}
+				break;
+		}
+
+		Collections.sort(employeeList, comp);
+	}
 }
+
+//【項目別Comparatorクラス】
+//	・項目ごとの昇順・降順Comparatorクラスを実装し、complareToメソッドをオーバーライドする
+//	　これらのクラスはEmployeeクラスで使用する
+//	　　数値項目：数値の大小
+//	　　日時項目：日時の大小
+//	　　文字列項目：StringのcompareTo()メソッドをそのまま利用する
+//employeeNo
+//【項目別Comparatorクラス】
+//	・項目ごとの昇順・降順Comparatorクラスを実装し、complareToメソッドをオーバーライドする
+//	　これらのクラスはEmployeeクラスで使用する
+//	　　数値項目：数値の大小
+//	　　日時項目：日時の大小
+//	　　文字列項目：StringのcompareTo()メソッドをそのまま利用する
+//employeeNo
+class ComparatorUpEmployee_no implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return empNo1.getEmployee_no() - empNo2.getEmployee_no();
+	}
+
+}
+
+class ComparatorDownEmployee_no implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return -(empNo1.getEmployee_no() - empNo2.getEmployee_no());
+	}
+
+}
+//shozokuName
+class ComparatorUpShozokuName implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return empNo1.getShozoku().getShozoku_code() - empNo2.getShozoku().getShozoku_code();
+	}
+
+}
+class ComparatorDownShozokuName implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return -(empNo1.getShozoku().getShozoku_code() - empNo2.getShozoku().getShozoku_code());
+	}
+
+}
+//name
+class ComparatorUpName implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return empNo1.getEmployee_name().compareTo(empNo2.getEmployee_name());
+	}
+
+}
+class ComparatorDownName implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return -(empNo1.getEmployee_name().compareTo(empNo2.getEmployee_name()));
+	}
+}
+//sex
+class ComparatorUpSex implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return empNo1.getSex().compareTo(empNo2.getSex());
+	}
+
+}
+class ComparatorDownSex implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return -(empNo1.getSex().compareTo(empNo2.getSex()));
+	}
+
+}
+//age
+class ComparatorUpaAge implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return empNo1.getAge() - empNo2.getAge();
+	}
+
+}
+class ComparatorDownaAge implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		return -(empNo1.getAge() - empNo2.getAge());
+	}
+
+}
+//birthday
+class ComparatorUpBirthday implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		//nullの場合処理が通らないので、ありえない最小値を入れて、比較を行う
+		Calendar cal= Calendar.getInstance();
+		cal.set(1000,1-1,1);
+		Date chage =new Date(cal.getTimeInMillis());
+
+		if(empNo1.getBirthday() == null) {
+			empNo1.setBirthday(chage);
+		}
+		if(empNo2.getBirthday() == null) {
+			empNo2.setBirthday(chage);
+		}
+
+
+		return empNo1.getBirthday().compareTo(empNo2.getBirthday());
+	}
+
+}
+
+class ComparatorDownBirthday implements Comparator<Employee> {
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		Employee empNo1 = o1;
+		Employee empNo2 = o2;
+
+		//nullの場合処理が通らないので、ありえない最小値を入れて、比較を行う
+		Calendar cal= Calendar.getInstance();
+		cal.set(1000,1-1,1);
+		Date chage =new Date(cal.getTimeInMillis());
+
+		if(empNo1.getBirthday() == null) {
+			empNo1.setBirthday(chage);
+		}
+		if(empNo2.getBirthday() == null) {
+			empNo2.setBirthday(chage);
+		}
+
+		return -(empNo1.getBirthday().compareTo(empNo2.getBirthday()));
+	}
+}
+

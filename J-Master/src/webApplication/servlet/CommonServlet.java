@@ -44,11 +44,22 @@ abstract class CommonServlet extends HttpServlet {
 		logger.debug("ロガー生成完了。");
 		//セッションチェック
 		HttpSession session = req.getSession(false);
-		sessionCheck(req, resp, session, logger);
+		if(!sessionCheck(req, resp, session, logger)) {
+			return;
+		}
 		logger.debug("セッションチェック終了。サブクラスのサーブレットの処理を行います。");
 //		LoggerCreate(logger);
 		//doServleｔメソッドを呼ぶ
-		doServlet(req,resp,session,logger);
+		try {
+			doServlet(req,resp,session,logger);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			for(StackTraceElement ste : e.getStackTrace()) {
+				logger.error(ste.toString());
+			}
+			throw e;
+		}
+
 	}
 
 
@@ -61,7 +72,7 @@ abstract class CommonServlet extends HttpServlet {
 	//	存在しない場合、すべてのセッション情報を破棄（session.invalidateメソッドを実行）して、ログイン画面(0001)に遷移する。（共通処理は終了）
 	//  ろぐあうとさーぶれっと
 	//セッションチェックを行う共通のメソッド
-	private void sessionCheck(HttpServletRequest req, HttpServletResponse resp,
+	private boolean sessionCheck(HttpServletRequest req, HttpServletResponse resp,
 			HttpSession session, Logger logger) throws ServletException, IOException {
 
 		if(session == null) {
@@ -69,7 +80,7 @@ abstract class CommonServlet extends HttpServlet {
 			this.getServletContext().getRequestDispatcher("/UserLoginInit/").
     		forward(req, resp);
 
-        	return;
+        	return false;
 		}
         if(session != null && session.getAttribute("login_info") == null) {
         	session.invalidate();
@@ -78,8 +89,9 @@ abstract class CommonServlet extends HttpServlet {
         	this.getServletContext().getRequestDispatcher("/UserLoginInit/").
     		forward(req, resp);
 
-        	return;
+        	return false;
         }
+        return true;
 
 	}
 	//	①-2) ロガーの作成を行う

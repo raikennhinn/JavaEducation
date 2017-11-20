@@ -38,11 +38,11 @@ public class EmployeeUpdateInitServlet extends CommonServlet{
 		try {
 			//リクエストパラメータから社員番号を取得
 			//従業員（Employee）オブジェクトを生成し、格納、返却
-			Employee emp = Employee.getEmployeeData(req.getParameter("empNoUp"));
+			Employee emp = Employee.getEmployeeData(req.getParameter("empNoUp"), logger);
 
 			// パターン２　インスタンスが自分自身にDBから取得した値をセットする
 			Employee emp2 = new Employee();
-			emp2.setEmployeeDataByDB(req.getParameter("empNoUp"));
+			emp2.setEmployeeDataByDB(req.getParameter("empNoUp"), logger);
 
 
 			//メッセージ情報の取得
@@ -54,7 +54,6 @@ public class EmployeeUpdateInitServlet extends CommonServlet{
 							"ECOMMON04",
 							"ECOMMON06"
 							);
-
 
 
 			//アトリビュートにセット

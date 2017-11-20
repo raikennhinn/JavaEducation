@@ -8,6 +8,24 @@
 <head>
 	<title>所属コード一覧</title>
 	<link rel="stylesheet" type="text/css" href="../css/j-master.css">
+<script>
+	function selectLeader(shozoku_code, index) {
+		var ret = showModalDialog('../ShozokuLeaderSelect/?ShozokuCode=' + shozoku_code,
+				'', 'dialogHeight:350px;dialogWidth:370px');
+
+		// テーブル行（ラベルとhidden）に、jsonからデータを取得してセット
+		var shozoku_id = 'shozoku_' + shozoku_code;
+
+
+		// ラベルには[従業員No:従業員名]形式
+		// hiddenには[従業員No]のみ
+		document.getElementById(shozoku_id).innerHTML = ret[0].employee_no + ':' + ret[0].employee_name;
+		var formList = document.forms['shozokuListForm'];
+		var empShozoku = formList.elements['hidden_employee_no'][index];
+		empShozoku.value = ret[0].employee_no +"--"+ shozoku_code;
+	}
+</script>
+
 </head>
 <body>
 
@@ -29,31 +47,43 @@
 
 	<!-- テーブル形式で全件表示。テーブルヘッダ行も表示する -->
 	<!-- まずはテーブルタグとテーブルヘッダタグを普通に書く -->
+	<form name="shozokuListForm">
+		<!-- 所属長の登録を実行する  所属長登録サーブレットへ接続-->
+		<p><input type="button" value="所属長登録" onclick=""/></p>
 
-	<table border="1">
-		<tr>
-			<th>所属コード</th>
-			<th>所属部</th>
-			<th>所属課</th>
-			<th>所属係</th>
-			<th>所属名</th>
-		</tr>
+		<table border="1">
 
-	<c:forEach var="sh" items="${ShozokuList}">
-		<tr>
-			<td>${sh.shozoku_code}</td>
-			<td>${sh.shozoku_bu}</td>
-			<td>${sh.shozoku_ka}</td>
-			<td>${sh.shozoku_kakari}</td>
-			<td>${sh.shozoku_bu} ${sh.shozoku_ka} ${sh.shozoku_kakari}</td>
+			<tr>
+				<th>所属コード</th>
+				<th>所属部</th>
+				<th>所属課</th>
+				<th>所属係</th>
+				<th>所属名</th>
+				<th colspan="2">所属長 選択</th>
+			</tr>
 
-		</tr>
-	</c:forEach>
+		<c:forEach var="sh" items="${ShozokuList}" varStatus="status">
+			<tr>
+				<td>${sh.shozoku_code}</td>
+				<td>${sh.shozoku_bu}</td>
+				<td>${sh.shozoku_ka}</td>
+				<td>${sh.shozoku_kakari}</td>
+				<td>${sh.shozoku_bu} ${sh.shozoku_ka} ${sh.shozoku_kakari}</td>
+				<td id="shozoku_${sh.shozoku_code}">
+					${sh.shozoku_leader}
+				</td>
+				<!-- 所属長選択サブ画面へ遷移する　所属コードをパラメータとして渡す-->
+				<td>
+					<input type="button" value="選択" onclick="selectLeader('${sh.shozoku_code}', '${status.index}')" />
+					<input type="hidden" name="hidden_employee_no" />
+				</td>
+			</tr>
+		</c:forEach>
 
-	<!-- テーブルタグを閉じる -->
-	</table>
+		<!-- テーブルタグを閉じる -->
+		</table>
 
-
+	</form>
 	</div>
 </body>
 </html>

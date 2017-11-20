@@ -29,9 +29,6 @@ public class ShozokuListServlet extends CommonServlet{
 
 		logger.info("所属コード一覧");
 
-		String aa = null;
-		aa.equals("");
-
 		//Shozokuの一覧を表示する
 		/*
 		 * JDBC接続～データ取得
@@ -49,18 +46,19 @@ public class ShozokuListServlet extends CommonServlet{
 	//		SQL
 			StringBuilder sb = new StringBuilder();
 			sb.append(" SELECT ");
-			sb.append(" shozoku_code, ");
-			sb.append(" shozoku_bu, ");
-			sb.append(" CASE shozoku_ka ");
+			sb.append(" SHOZOKU_CODE, ");
+			sb.append(" SHOZOKU_BU, ");
+			sb.append(" CASE SHOZOKU_KA ");
 			sb.append(" When '（なし）' Then '' ");
-			sb.append(" ELSE shozoku_ka END ");
-			sb.append(" as shozoku_ka, ");
-			sb.append(" CASE shozoku_kakari ");
+			sb.append(" ELSE SHOZOKU_KA END ");
+			sb.append(" as SHOZOKU_KA, ");
+			sb.append(" CASE SHOZOKU_KAKARI ");
 			sb.append(" When '（なし）' Then '' ");
-			sb.append(" ELSE shozoku_kakari END ");
-			sb.append(" as shozoku_kakari ");
+			sb.append(" ELSE SHOZOKU_KAKARI END ");
+			sb.append(" as SHOZOKU_KAKARI, ");
+			sb.append(" SHOZOKU_LEADER ");
 			sb.append(" FROM shozoku ");
-			sb.append(" ORDER BY shozoku_code; ");
+			sb.append(" ORDER BY SHOZOKU_CODE; ");
 			//SQLをセットし実行する
 			String sql = sb.toString();
 
@@ -76,20 +74,24 @@ public class ShozokuListServlet extends CommonServlet{
 				Shozoku sh = new Shozoku();
 
 				//所属コードのセット
-				int sh_code = rs.getInt("shozoku_code");
+				int sh_code = rs.getInt("SHOZOKU_CODE");
 				sh.setShozoku_code(sh_code);
 
 				//所属部のセット
-				String sh_bu = rs.getString("shozoku_bu");
+				String sh_bu = rs.getString("SHOZOKU_BU");
 				sh.setShozoku_bu(sh_bu);
 
 				//所属課のセット
-				String sh_ka = rs.getString("shozoku_ka");
+				String sh_ka = rs.getString("SHOZOKU_KA");
 				sh.setShozoku_ka(sh_ka);
 
 				//所属係のセット
-				String sh_kakari = rs.getString("shozoku_kakari");
+				String sh_kakari = rs.getString("SHOZOKU_KAKARI");
 				sh.setShozoku_kakari(sh_kakari);
+
+				//所属リーダーのセット
+				String sh_leader = rs.getString("SHOZOKU_LEADER");
+				sh.setShozoku_leader(sh_leader);
 
 //				sh.printName();
 
