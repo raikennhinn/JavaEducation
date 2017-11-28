@@ -46,19 +46,21 @@ public class ShozokuListServlet extends CommonServlet{
 	//		SQL
 			StringBuilder sb = new StringBuilder();
 			sb.append(" SELECT ");
-			sb.append(" SHOZOKU_CODE, ");
-			sb.append(" SHOZOKU_BU, ");
-			sb.append(" CASE SHOZOKU_KA ");
+			sb.append(" s.SHOZOKU_CODE, ");
+			sb.append(" s.SHOZOKU_BU, ");
+			sb.append(" CASE s.SHOZOKU_KA ");
 			sb.append(" When '（なし）' Then '' ");
-			sb.append(" ELSE SHOZOKU_KA END ");
+			sb.append(" ELSE s.SHOZOKU_KA END ");
 			sb.append(" as SHOZOKU_KA, ");
-			sb.append(" CASE SHOZOKU_KAKARI ");
+			sb.append(" CASE s.SHOZOKU_KAKARI ");
 			sb.append(" When '（なし）' Then '' ");
-			sb.append(" ELSE SHOZOKU_KAKARI END ");
+			sb.append(" ELSE s.SHOZOKU_KAKARI END ");
 			sb.append(" as SHOZOKU_KAKARI, ");
-			sb.append(" SHOZOKU_LEADER ");
-			sb.append(" FROM shozoku ");
-			sb.append(" ORDER BY SHOZOKU_CODE; ");
+			sb.append(" CONCAT(s.SHOZOKU_LEADER, ':', e.EMPLOYEE_NAME) as SHOZOKU_LEADER ");
+			sb.append(" FROM shozoku s ");
+			sb.append(" LEFT OUTER JOIN employee e ");
+			sb.append(" ON s.SHOZOKU_LEADER = e.EMPLOYEE_NO ");
+			sb.append(" ORDER BY s.SHOZOKU_CODE; ");
 			//SQLをセットし実行する
 			String sql = sb.toString();
 

@@ -72,7 +72,12 @@ public class SortServlet extends CommonServlet {
 
 		//req.setAttribute("empList",employeeList.subList(0,15));
 		//再描画時に必要
-		req.setAttribute("empList", employeeList.subList(0,15));
+		if(employeeList.size() <= 15) {
+			req.setAttribute("empList", employeeList);
+		}else {
+			req.setAttribute("empList", employeeList.subList(0,15));
+		}
+
 
 
 		//TODO:ページャ関連のデータを1ページ目の状態に戻す

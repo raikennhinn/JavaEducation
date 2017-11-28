@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import webApplication.bean.Employee;
+import webApplication.bean.Prefecture;
 import webApplication.bean.Shozoku;
 import webApplication.enumeration.Seibetu;
 import webApplication.util.DataBaseUtility;
@@ -69,6 +70,10 @@ public class EmployeeListInitialDisplayServlet extends CommonServlet{
 			sb.append("  e.sex, ");
 			sb.append("  e.age, ");
 			sb.append("  e.birthday,");
+			sb.append("  e.pref_CD,");
+			sb.append("  e.address,");
+			sb.append("  e.mail_address,");
+			sb.append("  e.note,");
 			sb.append("  CONCAT( ");
 			sb.append("    sh.shozoku_bu, ");
 			sb.append("    CASE sh.shozoku_ka ");
@@ -127,12 +132,32 @@ public class EmployeeListInitialDisplayServlet extends CommonServlet{
 				Date birthday = rs.getDate("birthday");				//生年月日
 				emp.setBirthday(birthday);
 
+				//追加分
+				emp.setPref_CD(rs.getInt("pref_CD"));			//都道府県コード
+
+				emp.setAddress(rs.getString("address"));		//住所
+
+				emp.setMail_address(rs.getString("mail_address")); //メールアドレス
+
+				emp.setNote(rs.getString("note"));				//備考欄
 
 				employeeList.add(emp);
 //				num = num+1;
 			}
 
 			num = employeeList.size();
+			//shozokuリストの取得（返り値はArrayList）と所属オブジェクトの生成
+			Shozoku shozoku = new Shozoku();
+			ArrayList<Shozoku> shozokuList = shozoku.allList(logger);
+			//所属リストをリスエストへ
+			hpSession.setAttribute("shozokuList", shozokuList);
+
+			//都道府県一覧の取得の実行とリクエストにセット
+			Prefecture perf = new Prefecture();
+			ArrayList<Prefecture> prefList = perf.allPrefGet(logger);
+			hpSession.setAttribute("prefList", prefList);
+
+
 
 			//1取得した従業員情報を保存
 			hpSession.setAttribute("employee_list", employeeList);
@@ -163,6 +188,12 @@ public class EmployeeListInitialDisplayServlet extends CommonServlet{
 			hpSession.setAttribute("UpDown", "");
 			hpSession.setAttribute("select", "");
 			hpSession.setAttribute("category", "");
+
+			hpSession.setAttribute("employee_noSearch", "");		//従業員No
+			hpSession.setAttribute("ShozokuSearch", "0");			//所属コード
+			hpSession.setAttribute("employeeNameSearch", "");		//氏名
+			hpSession.setAttribute("prefSearch", "0");				//都道府県コード
+			hpSession.setAttribute("addressSearch", "");			//住所
 
 			// 取得したデータをクライアントに渡す
 			// 引数１には、キーとなる文字列を設定

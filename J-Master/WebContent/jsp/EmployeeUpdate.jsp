@@ -166,7 +166,10 @@
 	</c:if>
 	</p>
 	<p>生年月日:<input type="text" name="birthday" size="10" value="${emp.birthdayAtSlash}"></p>
-	<p>
+	<p>都道府県:<input type="text" name="prefecture" size="3" value="${emp.pref_CD}"></p>
+	<p>住所:<input type="text" name="address" size="50" maxlength="100" value="${emp.address}"></p>
+	<p>メールアドレス:<input type="text" name="mail_address" size="30" maxlength="50" value="${emp.mail_address}"></p>
+	<p>備考:<textarea name="note" cols="20" rows=4>${emp.note}</textarea></p>
 
 	<p><!-- メッセージ表示欄--></p>
 	<!--③メッセージMapからメッセージ文字列を取得し、エラーチェックイベントに組み込む -->

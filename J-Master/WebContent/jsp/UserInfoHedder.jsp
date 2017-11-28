@@ -31,6 +31,11 @@ function logout_action(){
 }
 
 </script>
+<style>
+#logout_link {
+	color:#00ff00;
+}
+</style>
 <!-- </head> -->
 <!-- <body> -->
 
@@ -50,7 +55,7 @@ function logout_action(){
 	<p><span id="view_time"></span></p>
 	<input type="hidden" name="id" value="${login_info.id}"/>
 	<input type="hidden" name="name" value="${login_info.name}"/>
-	<p><A Href="javascript:void(0);" onclick="logout_action()">ログアウト</A></p>
+	<p><A id="logout_link" Href="javascript:void(0);" onclick="logout_action()">ログアウト</A></p>
 
 
 </form>

@@ -30,6 +30,16 @@ public class ShainTourokuServlet extends CommonServlet{
 //		// リクエストパラメータのエンコード
 //		req.setCharacterEncoding("UTF-8");
 
+		//トークンの照合
+		String tokenReq = req.getParameter("token");
+		String tokenSes = (String)hpSession.getAttribute("token");
+		if(tokenReq == null || tokenSes == null || !tokenReq.equals(tokenSes)) {
+			req.setAttribute("mes", "画面遷移が不正です。");
+			req.setAttribute("flg",false);
+			this.getServletContext().getRequestDispatcher("/jsp/shainTouroku.jsp").forward(req, resp);
+			return;
+		}
+
 
 		//setEmployeeUpdateで更新する予定の値をEmployeeクラスにセットする
 		Employee setemp =  new Employee();
@@ -40,7 +50,11 @@ public class ShainTourokuServlet extends CommonServlet{
 				req.getParameter("namekana"),
 				req.getParameter("sex"),
 				req.getParameter("age"),
-				req.getParameter("birthday")
+				req.getParameter("birthday"),
+				req.getParameter("prefecture"),
+				req.getParameter("address"),
+				req.getParameter("mail_address"),
+				req.getParameter("note")
 				);
 //
 		// アトリビュートにsetempをセット（キーは"emp"でよい）

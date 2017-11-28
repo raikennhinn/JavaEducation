@@ -1,13 +1,22 @@
 ﻿@CHARSET "UTF-8";
 body {
 	font-family: "Meiryo","ＭＳ Ｐゴシック",sans-serif;
+	font-size:10px;
 }
 h1{
-	text-align	:	center;
 	/*color		:	blue;*/
+	font-size: 17px;
+}
+h2{
+	/*color		:	blue;*/
+	font-size: 14px;
+	background-color:#20b2aa;
 }
 p.input {
 	height:20px;
+}
+input {
+	font-size:10px;
 }
 span.inputLabel {
 	width:70px;
@@ -17,7 +26,11 @@ span.input {
 	left:10px;
 }
 th {
-	font-size: 10pt;
+	font-size: 10px;
+}
+td {
+	font-size: 10px;
+	height:24px;
 }
 #error_msg {
 	color	:red;
@@ -25,42 +38,91 @@ th {
 #header_field {
 	float:left;
 	width:150px;
-	height:450px;
+	height:420px;
 	border-right: 2px solid #777777;
 	margin-right: 10px;
+	background-color:#1e90ff;
+	z-index:10;
 }
 #main_field {
-	width:1000px;
-	height:450px;
+	float:right;
+	position:absolute;
+	top:8px;
+	left:180px;
+	width:600px;
+	height:420px;
+	z-index:0;
+}
+#pager_and_dataChangeButtons {
+	fload:left;
+	margin-bottom:10px;
+}
+#pager {
+	margin-left:20px;
+}
+#dataChangeButtons {
+	position:relative;
+	left:30px;
+	margin-right:20px;
 }
 
-#sclber{
-	width: 830px;
-	height: 300px;
-	overflow-y: scroll;
-}
 /*全体のエリア*/
 #all_area {
-	width:820px;
+	width:590px;
+
 }
 
 /*固定するタイトル*/
-#title{
-	width: 800px;
+#titleXYBlockTable{
+	float:left;
+	table-layout: fixed;
+}
+/*横スクロールする部分のタイトル*/
+#titleXBlock {
+	float:left;
+	width: 450px;
+	overflow-x: hidden; /* 横スクロールはJavaScriptで */
+	overflow-y: hidden;
+}
+#titleXBlockTable {
+	width: 1170px;
+	table-layout: fixed;
+}
+/*縦スクロールする部分のタイトル*/
+#dataYBlock {
+	float:left;
+	height:200px;
+	overflow-x: hidden; /* 縦スクロールはJavaScriptで */
+	overflow-y: hidden;
+}
+#dataYBlockTable {
 	table-layout: fixed;
 }
 
-/*データ部分でのスクロール*/
-#scroll_box {
-	width: 820px;
-	height: 280px;
-	overflow-x: hidden; /* 横スクロール非表示 */
-	overflow-y: scroll; /* 縦スクロール */
+/* 縦横スクロールするデータ部分 */
+#dataXBlock {
+	float:left;
+	width: 468px;
+	height:217px;
+	overflow-x: scroll;
+	overflow-y: scroll;
 }
-
-
-#data{
-	width: 800px;
+#dataXBlockTable {
+	width: 1170px;
 	table-layout: fixed;
 }
+div.tableColumn {
+	white-space: nowrap;
+	overflow:hidden;
+}
+
+div.button { text-align: left;
+			float: left;
+				 }
+div.link { text-align: right; }
+
+table.tableFontSize {
+	font-size : 10px;
+}
+
 

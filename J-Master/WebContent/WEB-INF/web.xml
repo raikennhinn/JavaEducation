@@ -175,6 +175,22 @@
     <url-pattern>/ShozokuLeaderSelect/</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+   <servlet-name>ShozokuLeaderUpdate</servlet-name>
+   <servlet-class>webApplication.servlet.ShozokuLeaderUpdateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShozokuLeaderUpdate</servlet-name>
+    <url-pattern>/ShozokuLeaderUpdate/</url-pattern>
+  </servlet-mapping>
 
+    <servlet>
+   <servlet-name>EmployeeSearch</servlet-name>
+   <servlet-class>webApplication.servlet.EmployeeSearchSrevlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmployeeSearch</servlet-name>
+    <url-pattern>/EmployeeSearch/</url-pattern>
+  </servlet-mapping>
 
 </web-app>

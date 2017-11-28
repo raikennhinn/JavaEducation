@@ -42,7 +42,11 @@ public class EmployeeUpdateServlet extends CommonServlet{
 					req.getParameter("namekana"),
 					req.getParameter("sex"),
 					req.getParameter("age"),
-					req.getParameter("birthday")
+					req.getParameter("birthday"),
+					req.getParameter("prefecture"),
+					req.getParameter("address"),
+					req.getParameter("mail_address"),
+					req.getParameter("note")
 					);
 
 			// アトリビュートにsetempをセット（キーは"emp"でよい）

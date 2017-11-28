@@ -12,6 +12,10 @@
 	function selectLeader(shozoku_code, index) {
 		var ret = showModalDialog('../ShozokuLeaderSelect/?ShozokuCode=' + shozoku_code,
 				'', 'dialogHeight:350px;dialogWidth:370px');
+	//	alert("retの種類:" + typeof ret);
+		if (typeof ret != 'object') {
+			return false;
+		}
 
 		// テーブル行（ラベルとhidden）に、jsonからデータを取得してセット
 		var shozoku_id = 'shozoku_' + shozoku_code;
@@ -24,6 +28,19 @@
 		var empShozoku = formList.elements['hidden_employee_no'][index];
 		empShozoku.value = ret[0].employee_no +"--"+ shozoku_code;
 	}
+
+	function update(){
+
+		var res = confirm("この内容で登録してもよいですか？");
+		if(res){
+			// サーバーにリクエストを送信
+			var leader_form = document.forms['shozokuListForm'];
+			leader_form.action = "../ShozokuLeaderUpdate/";
+			leader_form.submit();
+		}
+
+	}
+
 </script>
 
 </head>
@@ -41,15 +58,23 @@
 	<div id="main_field">
 	<h1>所属コード一覧</h1>
 	<p><a href="../ReturnMenu/">メニューに戻る</a></p>
+
+	<c:set var="flg" value="${requestScope['flg']}" />
+	<c:if test="${flg}">
+		<p>${requestScope['mes']}</p>
+	</c:if>
+	<c:if test="${!flg}">
+		<p id="error_msg">${requestScope['mes']}</p>
+	</c:if>
 	<!-- サーブレットから送られてきたデータを取得  ShozokuList-->
 	<!-- req.setAttribute("ShozokuList", szkItiran); -->
 	<c:set var="ShozokuList" value="${requestScope['ShozokuList']}" />
 
 	<!-- テーブル形式で全件表示。テーブルヘッダ行も表示する -->
 	<!-- まずはテーブルタグとテーブルヘッダタグを普通に書く -->
-	<form name="shozokuListForm">
+	<form name="shozokuListForm" target="_self" method="POST">
 		<!-- 所属長の登録を実行する  所属長登録サーブレットへ接続-->
-		<p><input type="button" value="所属長登録" onclick=""/></p>
+		<p><input type="button" value="所属長登録" onclick="update()"/></p>
 
 		<table border="1">
 

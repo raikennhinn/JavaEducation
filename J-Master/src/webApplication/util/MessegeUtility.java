@@ -24,33 +24,38 @@ public class MessegeUtility {
 		ResultSet rs = null;
 
 		//DBへの接続実施
-		conn = DataBaseUtility.conectionDB();
+		try {
+			conn = DataBaseUtility.conectionDB();
 
-		// １．StringのメッセージIDを引数に受け取る
-		// ２．DB検索。メッセージIDを条件に、messageテーブルからmessegeを取得
-		//SQLの実施
-		StringBuilder mssb = new StringBuilder();
-		//取得したIDからmessegeを検索するSQL
-		mssb.append(" SELECT message ");
-		mssb.append(" FROM message ");
-		mssb.append(" WHERE message_id = ? ");
+			// １．StringのメッセージIDを引数に受け取る
+			// ２．DB検索。メッセージIDを条件に、messageテーブルからmessegeを取得
+			//SQLの実施
+			StringBuilder mssb = new StringBuilder();
+			//取得したIDからmessegeを検索するSQL
+			mssb.append(" SELECT message ");
+			mssb.append(" FROM message ");
+			mssb.append(" WHERE message_id = ? ");
 
-		//文字列へ
-		String sql = mssb.toString();
-		//？に取得してきたIDをセットし、実行
-		ps = conn.prepareStatement(sql);
-		ps.setString(1, id);
-		rs = ps.executeQuery();
+			//文字列へ
+			String sql = mssb.toString();
+			//？に取得してきたIDをセットし、実行
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
 
-		String mes = null;
-		// ３．取得したmessageをStringでreturnして終了
-		while(rs.next()){
-			mes = rs.getString("message");
+			String mes = null;
+			// ３．取得したmessageをStringでreturnして終了
+			while(rs.next()){
+				mes = rs.getString("message");
+			}
 
+			return  mes;
+
+		}finally {
+			rs.close();
+			ps.close();
+			conn.close();
 		}
-
-		return  mes;
-
 	}
 
 	/**
@@ -76,61 +81,68 @@ public class MessegeUtility {
 		ResultSet rs = null;
 
 		//DBへの接続実施
-		conn = DataBaseUtility.conectionDB();
+		try {
+			conn = DataBaseUtility.conectionDB();
 
-		//MAPの定義
-		HashMap<String, String> mes = new HashMap<String, String>();
+			//MAPの定義
+			HashMap<String, String> mes = new HashMap<String, String>();
 
-		//SQLでIDとメッセージの取得
-		//SQLの実施
-		StringBuilder mssb = new StringBuilder();
-		//取得したIDからmessegeを検索するSQL
-		mssb.append(" SELECT message_id, ");
-		mssb.append(" message ");
-		mssb.append(" FROM message ");
-		// Where句で使用するmessage_idを、引数で入ってきた数だけ使用するようにしたい
-		// 複数の値をWhereの条件に指定する書き方は？
-		//WHERE message_id = ? || message_id = ? || message_id = ?
-		mssb.append(" WHERE message_id IN( ");
-		//全件取得
-		//文字列へ
-		for(int i =0; i < id.length ; i++) {
-			if(i == id.length -1) {
-				mssb.append("?");
-			}else {
-				mssb.append("?,");
-			}
-		}
-		mssb.append(")");
-
-		String sql = mssb.toString();
-		ps = conn.prepareStatement(sql);
-		for(int i =1; i <= id.length ; i++) {
-			ps.setString(i, id[i-1]);
-		}
-		rs = ps.executeQuery();
-
-
-
-
-		int i = 0;
-		while(rs.next()) {
-			//idが同じもののみ取得
-			// ここで見つかればrs.first();　i++;(iが最後ならbreak;）
-			// ここで見つからなければなにもしない
-			// rsが最後まで回っても見つからなければ、やはりrs.first()とi++;(iが最後ならbreak;）
-
-			for(i=0; i< id.length ; i++) {
-				if(rs.getString("message_id").equals(id[i])) {
-					mes.put(id[i], rs.getString("message"));
-					break;
+			//SQLでIDとメッセージの取得
+			//SQLの実施
+			StringBuilder mssb = new StringBuilder();
+			//取得したIDからmessegeを検索するSQL
+			mssb.append(" SELECT message_id, ");
+			mssb.append(" message ");
+			mssb.append(" FROM message ");
+			// Where句で使用するmessage_idを、引数で入ってきた数だけ使用するようにしたい
+			// 複数の値をWhereの条件に指定する書き方は？
+			//WHERE message_id = ? || message_id = ? || message_id = ?
+			mssb.append(" WHERE message_id IN( ");
+			//全件取得
+			//文字列へ
+			for(int i =0; i < id.length ; i++) {
+				if(i == id.length -1) {
+					mssb.append("?");
+				}else {
+					mssb.append("?,");
 				}
 			}
-		}
+			mssb.append(")");
+
+			String sql = mssb.toString();
+			ps = conn.prepareStatement(sql);
+			for(int i =1; i <= id.length ; i++) {
+				ps.setString(i, id[i-1]);
+			}
+			rs = ps.executeQuery();
+
+
+
+
+			int i = 0;
+			while(rs.next()) {
+				//idが同じもののみ取得
+				// ここで見つかればrs.first();　i++;(iが最後ならbreak;）
+				// ここで見つからなければなにもしない
+				// rsが最後まで回っても見つからなければ、やはりrs.first()とi++;(iが最後ならbreak;）
+
+				for(i=0; i< id.length ; i++) {
+					if(rs.getString("message_id").equals(id[i])) {
+						mes.put(id[i], rs.getString("message"));
+						break;
+					}
+				}
+			}
 
 		return mes;
 
+		}finally {
+			rs.close();
+			ps.close();
+			conn.close();
+		}
 	}
+
 
 
 
@@ -142,30 +154,36 @@ public class MessegeUtility {
 		ResultSet rs = null;
 
 		//DBへの接続実施
-		conn = DataBaseUtility.conectionDB();
+		try {
+			conn = DataBaseUtility.conectionDB();
 
-		//MAPの定義
-		HashMap<String, String> mesall = new HashMap<String, String>();
+			//MAPの定義
+			HashMap<String, String> mesall = new HashMap<String, String>();
 
-		//SQLでIDとメッセージの取得
-		//SQLの実施
-		StringBuilder mssb = new StringBuilder();
-		//取得したIDからmessegeを検索するSQL
-		mssb.append(" SELECT message_id, ");
-		mssb.append(" message ");
-		mssb.append(" FROM message ");
-		//全件取得
-		//文字列へ
-		String sql = mssb.toString();
-		ps = conn.prepareStatement(sql);
-		rs = ps.executeQuery();
+			//SQLでIDとメッセージの取得
+			//SQLの実施
+			StringBuilder mssb = new StringBuilder();
+			//取得したIDからmessegeを検索するSQL
+			mssb.append(" SELECT message_id, ");
+			mssb.append(" message ");
+			mssb.append(" FROM message ");
+			//全件取得
+			//文字列へ
+			String sql = mssb.toString();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
 
-		while(rs.next()) {
-			mesall.put(rs.getString("message_id"), rs.getString("message"));
+			while(rs.next()) {
+				mesall.put(rs.getString("message_id"), rs.getString("message"));
+			}
+
+
+			return mesall;
+		}finally {
+			rs.close();
+			ps.close();
+			conn.close();
 		}
-
-
-		return mesall;
 
 	}
 

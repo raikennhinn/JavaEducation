@@ -41,8 +41,8 @@ public class EmployeeUpdateInitServlet extends CommonServlet{
 			Employee emp = Employee.getEmployeeData(req.getParameter("empNoUp"), logger);
 
 			// パターン２　インスタンスが自分自身にDBから取得した値をセットする
-			Employee emp2 = new Employee();
-			emp2.setEmployeeDataByDB(req.getParameter("empNoUp"), logger);
+//			Employee emp2 = new Employee();
+//			emp2.setEmployeeDataByDB(req.getParameter("empNoUp"), logger);
 
 
 			//メッセージ情報の取得

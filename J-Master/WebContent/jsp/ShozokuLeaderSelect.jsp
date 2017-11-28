@@ -45,17 +45,24 @@ function returnParentWindow() {
 	window.returnValue = json;
 	window.close();
 }
+function displayReturn(){
+	window.returnValue = '';
+	window.close();
+}
 </script>
 
 </head>
 <body>
 	<form name="empNoSelect">
+		<h1>所属長の選択</h1>
+		<div align="right"><a href="javascript:void(0);" onclick="displayReturn();">戻る</a></div>
 		<p><input type="button" value=" 選択 " onclick="returnParentWindow();"></p>
+
 		<table border="1">
 			<colgroup>
 				<col style="width:50">
 				<col style="width:90">
-				<col style="width:100">
+				<col style="width:110">
 			</colgroup>
 			<tr>
 				<th>選択</th>

@@ -2,6 +2,37 @@
     pageEncoding="UTF-8"%>
 	<% // TODO ここでJSTLの使用を宣言 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.security.NoSuchAlgorithmException" %>
+<%@ page import="java.security.SecureRandom" %>
+<%
+	String tokenStr = "";
+
+	//トークンの作成
+	final int TOKEN_LENGTH = 16;//16*2=32バイト
+
+ 	//32バイトのCSRFトークンを作成
+    byte token[] = new byte[TOKEN_LENGTH];
+    StringBuffer buf = new StringBuffer();
+    SecureRandom random = null;
+
+    try {
+      random = SecureRandom.getInstance("SHA1PRNG");
+      random.nextBytes(token);
+
+      for (int i = 0; i < token.length; i++) {
+        buf.append(String.format("%02x", token[i]));
+      }
+
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    }
+    tokenStr = buf.toString();
+
+	if(session.getAttribute("token") == null) {
+	    // トークンをセッションに保存
+	    session.setAttribute("token", tokenStr);
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -185,6 +216,10 @@
 		</p>
 
 		<p>生年月日:<input type="text" name="birthday" size="10" value="${emp.birthdayAtSlash}"></p>
+		<p>都道府県:<input type="text" name="prefecture" size="3" value="${emp.pref_CD}"></p>
+		<p>住所:<input type="text" name="address" size="50" maxlength="100" value="${emp.address}"></p>
+		<p>メールアドレス:<input type="text" name="mail_address" size="30" maxlength="50" value="${emp.mail_address}"></p>
+		<p>備考:<textarea name="note" cols="20" rows=4>${emp.note}</textarea></p>
 
 <!-- 登録ボタンとリセットボタンを用意する。
 　　　登録ボタンは押下時に入力チェック（後述）と、登録確認ダイアログを表示。OKを押したら登録処理（サーブレット）起動。
@@ -196,6 +231,7 @@
 			<input type="reset" name="リセット" value=" 取消 " onclick="ColorallRiset()"></p>
 			<p><a href="../EmployeeList/">戻る</a></p>
 
+		<input type="hidden" name="token" value="<%=tokenStr %>" />
 	</form>
 	</div>
 </body>

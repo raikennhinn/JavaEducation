@@ -28,7 +28,19 @@ public class Employee {
 	private int age;				//年齢
 	private Date birthday;			//生年月日
 	Shozoku shozoku;				//Shozokuクラスの
+	private  int pref_CD;			//都道府県コード
+	private String address;			//住所
+	private String mail_address;	//メールアドレス
+	private String note;			//備考欄
 
+	/**
+	 *  「年齢」未入力をあらわす定数
+	 */
+	private final int AGE_EMPTY = -1;
+	/**
+	 *  「都道府県」未入力をあらわす定数
+	 */
+	private final int PREFECTURE_EMPTY = -1;
 
 	//社員コードのゲッターとセッター
 	public int getEmployee_no() {
@@ -112,7 +124,30 @@ public class Employee {
 		this.employee_namekana = employee_namekana;
 	}
 
-
+	public int getPref_CD() {
+		return pref_CD;
+	}
+	public void setPref_CD(int pref_CD) {
+		this.pref_CD = pref_CD;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getMail_address() {
+		return mail_address;
+	}
+	public void setMail_address(String mail_address) {
+		this.mail_address = mail_address;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
 
 	/**
 	 * DBより従業員No.指定で情報を取得し、自分自身にセットする
@@ -194,6 +229,8 @@ public class Employee {
 
 	/**
 	 * 従業員Noでしていした従業員情報を返す
+	 * EmployeeUpdateInitServlet
+	 * 未使用
 	 * @throws NamingException
 	 * @throws SQLException
 	 */
@@ -214,7 +251,11 @@ public class Employee {
 			sb.append(" employee_name_kana, ");
 			sb.append(" sex, ");
 			sb.append(" ifnull(age, -1) as age, ");
-			sb.append(" birthday ");
+			sb.append(" birthday, ");
+			sb.append(" pref_CD, ");
+			sb.append(" address, ");
+			sb.append(" mail_address, ");
+			sb.append(" note ");
 			sb.append(" FROM employee ");
 			sb.append(" WHERE employee_no = ? ");
 
@@ -262,6 +303,19 @@ public class Employee {
 				//生年月日
 				Date birthday = rs.getDate("birthday");
 				emp.setBirthday(birthday);
+
+				//都道府県
+				int pref_cd = rs.getInt("pref_CD");
+				emp.setPref_CD(pref_cd);
+				//住所
+				String address = rs.getString("address");
+				emp.setAddress(address);
+				//メールアドレス
+				String mail_address = rs.getString("mail_address");
+				emp.setMail_address(mail_address);
+				//備考
+				String note = rs.getString("note");
+				emp.setNote(note);
 			}
 
 			//従業員情報各種を返す
@@ -292,10 +346,11 @@ public class Employee {
 			String namekana,
 			String sex,
 			String age,
-			String birthday){
-
-		// 「年齢」未入力をあらわす定数
-		final int AGE_EMPTY = -1;
+			String birthday,
+			String prefecture,
+			String address,
+			String mail_address,
+			String note){
 
 		//変更された値の取得確認
 		//変更された値を各変数にセットする
@@ -325,6 +380,18 @@ public class Employee {
 			String jdbcBirthday = birthday.replace('/', '-');
 			this.birthday = Date.valueOf(jdbcBirthday);
 		}
+		//都道府県
+		if(prefecture.equals("")) {
+			this.pref_CD = PREFECTURE_EMPTY;
+		} else {
+			this.pref_CD = Integer.parseInt(prefecture);
+		}
+		//住所
+		this.address = address;
+		//メールアドレス
+		this.mail_address = mail_address;
+		//備考
+		this.note = note;
 	}
 
 
@@ -341,8 +408,7 @@ public class Employee {
 
 		//必要な変数
 		int update = 0;
-		// 「年齢」未入力をあらわす定数
-		final int AGE_EMPTY = -1;
+
 		try {
 			conn = DataBaseUtility.conectionDB();
 
@@ -363,6 +429,10 @@ public class Employee {
 			inempUpdate.append(" sex = ?, ");
 			inempUpdate.append(" age = ?, ");
 			inempUpdate.append(" birthday = ?, ");
+			inempUpdate.append(" pref_CD = ?, ");
+			inempUpdate.append(" address = ?, ");
+			inempUpdate.append(" mail_address = ?, ");
+			inempUpdate.append(" note = ?, ");
 			inempUpdate.append(" update_user = ?, ");
 			inempUpdate.append(" update_datetime = NOW() ");
 			inempUpdate.append(" WHERE employee_no = ?;");
@@ -386,10 +456,18 @@ public class Employee {
 			}else {
 				ps.setDate(7, this.birthday);
 			}
+			if(this.pref_CD == PREFECTURE_EMPTY) {
+				ps.setNull(8, java.sql.Types.INTEGER);
+			}else {
+				ps.setInt(8, this.pref_CD);
+			}
+			ps.setString(9, this.address);
+			ps.setString(10, this.mail_address);
+			ps.setString(11, this.note);
 
-			ps.setString(8, "更新者");	// 将来的にはログインユーザ名
+			ps.setString(12, "更新者");	// 将来的にはログインユーザ名
 
-			ps.setInt(9, this.employee_no);
+			ps.setInt(13, this.employee_no);
 			//実行と同時にupdateに値を入れる
 			update = ps.executeUpdate();
 
@@ -466,9 +544,6 @@ public class Employee {
 
 		//必要な変数
 		int insert = 0;
-		// 「年齢」未入力をあらわす定数
-		final int AGE_EMPTY = -1;
-
 
 		try{
 
@@ -486,8 +561,12 @@ public class Employee {
 			sb.append(" employee_name_kana, ");
 			sb.append(" sex, ");
 			sb.append(" age, ");
-			sb.append(" birthday)");
-			sb.append(" values ( ?, ?, ?, ?, ?, ?, ? );");
+			sb.append(" birthday, ");
+			sb.append(" pref_CD, ");
+			sb.append(" address, ");
+			sb.append(" mail_address, ");
+			sb.append(" note)");
+			sb.append(" values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 			//ＳＱＬの作成
 			String sql = sb.toString();
 			// PreparedStatementの場合、作成にSQLが必須
@@ -508,6 +587,14 @@ public class Employee {
 			}else {
 				ps.setDate(7, this.birthday);
 			}
+			if(this.pref_CD == PREFECTURE_EMPTY) {
+				ps.setNull(8, java.sql.Types.INTEGER);
+			}else {
+				ps.setInt(8, this.pref_CD);
+			}
+			ps.setString(9, this.address);
+			ps.setString(10, this.mail_address);
+			ps.setString(11, this.note);
 
 			//実行と同時にupdateに値を入れる
 			insert = ps.executeUpdate();
@@ -631,6 +718,172 @@ public class Employee {
 			ps.close();
 			conn.close();
 		}
+	}
+
+	public ArrayList<Employee> Search(
+			int employeeNO,int ShzokuCode,String name,int prefCode,String address,Logger logger)
+			throws Exception {
+		//値を返すArrayListの作成
+		ArrayList<Employee> empList = new ArrayList<Employee>();
+
+		logger.info("検索を行っています");
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			conn = DataBaseUtility.conectionDB();
+			//SQL文の生成
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(" SELECT ");
+			sb.append(" e.employee_no, ");
+			sb.append(" e.shozoku_code, ");
+			sb.append(" e.employee_name, ");
+			sb.append(" e.employee_name_kana, ");
+			sb.append(" e.sex, ");
+			sb.append(" e.age, ");
+			sb.append(" e.birthday, ");
+			sb.append(" e.pref_CD, ");
+			sb.append(" e.address, ");
+			sb.append(" e.mail_address, ");
+			sb.append(" e.note, ");
+			sb.append(" CONCAT( ");
+			sb.append(" 	 sh.shozoku_bu, ");
+			sb.append("  	 CASE sh.shozoku_ka ");
+			sb.append(" 		 When '（なし）' Then '' ");
+			sb.append("  		 Else sh.shozoku_ka ");
+			sb.append(" 		 END, ");
+			sb.append(" 	 CASE sh.shozoku_kakari ");
+			sb.append("  		 When '（なし）' Then '' ");
+			sb.append("  		 Else sh.shozoku_kakari ");
+			sb.append("  		 END ");
+			sb.append("  		 ) as shozoku_name ");
+			sb.append(" FROM employee e ");
+			sb.append(" JOIN shozoku sh ");
+			sb.append(" on e.shozoku_code = sh.shozoku_code ");
+			//検索条件を入れていく。引数にnullもしくわ0が入っていた場合は、検索条件から除外する
+			//coutでifを通った行の値（通った属性名）を保持。
+			ArrayList<String> SerchName = new ArrayList<String>();
+			if(employeeNO != 0 || ShzokuCode != 0 || !name.equals("") || prefCode != 0 || !address.equals("")) {
+				sb.append(" WHERE ");
+			}
+			if(employeeNO != 0) {
+				sb.append(" employee_no = ? ");
+				SerchName.add("従業員No");
+			}
+			if(ShzokuCode != 0) {
+				if(employeeNO != 0) {
+					sb.append(" AND ");
+				}
+				sb.append(" e.shozoku_code = ?  ");
+				SerchName.add("所属コード");
+			}
+			if(!name.equals("")) {
+				if(employeeNO !=0 || ShzokuCode != 0) {
+					sb.append(" AND ");
+				}
+				sb.append(" e.employee_name LIKE  ? ");
+				SerchName.add("氏名");
+			}
+			if(prefCode != 0) {
+				if(employeeNO !=0 || ShzokuCode != 0 || !name.equals("")) {
+					sb.append(" AND ");
+				}
+				sb.append(" e.pref_CD = ? ");
+				SerchName.add("都道府県コード");
+			}
+			if(!address.equals("")) {
+				if(employeeNO !=0 || ShzokuCode != 0 || !name.equals("")|| prefCode != 0) {
+					sb.append(" AND ");
+				}
+				sb.append(" e.address LIKE ? ");
+				SerchName.add("住所");
+			}
+			sb.append(" ORDER BY employee_no; ");
+
+			//文字列へ
+			String serch = sb.toString();
+			//？に取得してきた従業員Noをセットし、実行
+			ps = conn.prepareStatement(serch);
+
+			//for でカウントした数でps.set●●を追加してもよいが、データ型が異なるので、その部分をどうするのか
+			for(int i =0; i < SerchName.size() ; i++ ) {
+				if(SerchName.get(i).equals("従業員No")) {
+					ps.setInt(i+1, employeeNO);
+				}
+				if(SerchName.get(i).equals("所属コード")) {
+					ps.setInt(i+1, ShzokuCode);
+				}
+				if(SerchName.get(i).equals("氏名")) {
+					ps.setString(i+1, "%"+name+"%");
+				}
+				if(SerchName.get(i).equals("都道府県コード")) {
+					ps.setInt(i+1, prefCode);
+				}
+				if(SerchName.get(i).equals("住所")) {
+					ps.setString(i+1, "%"+address+"%");
+				}
+			}
+
+			logger.debug("実行SQL："+serch);
+			rs = ps.executeQuery();
+
+			while(rs.next()) {
+				Employee emp = new Employee();					//Employeeクラスのオブジェクトを生成
+				Shozoku szk = new Shozoku();					//Shozokuクラスのオブジェクトを生成
+
+				int code = rs.getInt("employee_no");				//社員コード
+				emp.setEmployee_no(code);						//Employee にセット
+
+
+				String setname = rs.getString("employee_name");	//氏名
+				emp.setEmployee_name(setname);
+
+				int shozoku = rs.getInt("shozoku_code");			//ここでemployeeクラスから所属名を取り出す必要
+				String shozokuName = rs.getString("shozoku_name");
+
+				// ここで所属コードをszkにセット
+				szk.setShozoku_code(shozoku);
+				szk.setShozoku_name(shozokuName);
+//				emp.setShozoku_code(szk.getShozoku_code());		//所属コードを両クラス同じにする
+				emp.setShozoku(szk);
+
+
+				int sex = rs.getInt("sex");					//性別
+				//性別の結び付け(数を文字へ)を実施する
+				Seibetu sei = Seibetu.getSeibetu(sex);
+				String sexStr = sei.getName();								//性別が格納されている
+				emp.setSex(sexStr);
+
+
+				int age = rs.getInt("age");							//年齢
+				emp.setAge(age);
+
+				Date birthday = rs.getDate("birthday");				//生年月日
+				emp.setBirthday(birthday);
+
+				//追加分
+				emp.setPref_CD(rs.getInt("pref_CD"));			//都道府県コード
+
+				emp.setAddress(rs.getString("address"));		//住所
+
+				emp.setMail_address(rs.getString("mail_address")); //メールアドレス
+
+				emp.setNote(rs.getString("note"));				//備考欄
+
+				empList.add(emp);
+			}
+			//値の入ったリストを返す
+			return empList;
+
+		}finally {
+				rs.close();
+				ps.close();
+				conn.close();
+			}
+
 	}
 
 	//	【Employeeクラス】

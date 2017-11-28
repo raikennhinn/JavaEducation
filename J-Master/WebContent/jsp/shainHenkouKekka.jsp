@@ -27,19 +27,23 @@
 		<p id="error_msg">${requestScope['mes']}</p>
 	</c:if>
 <% // TODO 式言語を使って値を取得、表示する %>
-	<p>社員番号:${emp.employee_no}</p>
-	<p>所属コード:${emp.shozoku.shozoku_code}</p>
-	<p>氏名:${emp.employee_name}</p>
-	<p>氏名カナ:${emp.employee_namekana}</p>
-	<p>性別:${emp.sexAtKanji}</p>
+	<p>社員番号:<c:out value="${emp.employee_no}" escapeXml="true" /></p>
+	<p>所属コード:<c:out value="${emp.shozoku.shozoku_code}" escapeXml="true" /></p>
+	<p>氏名:<c:out value="${emp.employee_name}" escapeXml="true" /></p>
+	<p>氏名カナ:<c:out value="${emp.employee_namekana}" escapeXml="true" /></p>
+	<p>性別:<c:out value="${emp.sexAtKanji}" escapeXml="true" /></p>
 	<p>年齢:
 	<c:if test="${emp.age==-1}">
 	</c:if>
 	<c:if test="${emp.age!=-1}">
-		${emp.age}
+		<c:out value="${emp.age}" escapeXml="true" />
 	</c:if>
 	</p>
-	<p>生年月日:${emp.birthdayAtSlash}</p>
+	<p>生年月日:<c:out value="${emp.birthdayAtSlash}" escapeXml="true" /></p>
+	<p>都道府県:<c:out value="${emp.pref_CD}" escapeXml="true" /></p>
+	<p>住所:<c:out value="${emp.address}" escapeXml="true" /></p>
+	<p>メールアドレス:<c:out value="${emp.mail_address}" escapeXml="true" /></p>
+	<p>備考:<c:out value="${emp.note}" escapeXml="true" /></p>
 <% // TODO 「従業員一覧画面に戻る」リンクをここに追加 %>
 	<a href="../EmployeeList/">従業員一覧に戻る</a>
 	</div>

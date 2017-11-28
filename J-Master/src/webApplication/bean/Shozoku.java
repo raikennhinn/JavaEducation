@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.naming.NamingException;
+
+import org.apache.log4j.Logger;
 
 import webApplication.util.DataBaseUtility;
 
@@ -159,6 +163,138 @@ public class Shozoku {
 		}finally {
 			rs.close();
 			ps.close();
+			conn.close();
+		}
+	}
+
+	/**
+	 * 所属長の登録を実行できるSQLを作成し、実行する
+	 * アップデートの際に必要な、所属コードと従業員Noを引数として受け取る（loggerもともに）
+	 * @throws SQLException
+	 * @throws NamingException
+	 */
+	public int ShozokuLeaderUpdate(int empNo,int shozokuCode,Logger logger) throws SQLException, NamingException {
+
+		//DBへの接続実施
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		//必要な変数（実行結果を返す）
+		int update = 0;
+
+		try {
+			conn = DataBaseUtility.conectionDB();
+			// オートコミットをオフにする
+			conn.setAutoCommit(false);
+			//SQL文の作成
+			StringBuilder LeaderpUpdate = new StringBuilder();
+			LeaderpUpdate.append(" UPDATE shozoku ");
+			LeaderpUpdate.append(" SET ");
+			LeaderpUpdate.append(" SHOZOKU_LEADER = ?, ");
+			LeaderpUpdate.append(" update_datetime = NOW() ");
+			LeaderpUpdate.append(" WHERE SHOZOKU_CODE = ?; ");
+			//文字列をSQLとしてまとめる
+			String sql = LeaderpUpdate.toString();
+			// PreparedStatementの場合、作成にSQLが必須
+			ps = conn.prepareStatement(sql);
+			//SQLの？に値を入れる
+			ps.setInt(1, empNo );
+			ps.setInt(2, shozokuCode );
+			//実行内容をログに残す
+			logger.debug("UPDEATE開始"+ sql);
+			//実行と同時にupdateに値を入れる
+			update = ps.executeUpdate();
+
+			//updateが成功していればコミット失敗した場合はロールバック
+			if(update == 1) {
+				//コミットする
+				conn.commit();
+			}
+
+			//最終的に実行結果の値（1行ずつ更新をおこなうため１）を返す
+			return update;
+
+		}finally {
+			conn.rollback();
+			ps.close();
+			conn.close();
+		}
+	}
+
+
+	public ArrayList<Shozoku> allList(Logger logger) throws SQLException, NamingException {
+
+		//必要変数の用意
+		Connection conn = null;
+		Statement stmt =null;
+		ResultSet rs = null;
+		//接続
+		try{
+			conn = DataBaseUtility.conectionDB();
+			stmt = conn.createStatement();
+
+
+	//		SQL
+			StringBuilder sb = new StringBuilder();
+			sb.append(" SELECT ");
+			sb.append(" s.SHOZOKU_CODE, ");
+			sb.append(" s.SHOZOKU_BU, ");
+			sb.append(" CASE s.SHOZOKU_KA ");
+			sb.append(" When '（なし）' Then '' ");
+			sb.append(" ELSE s.SHOZOKU_KA END ");
+			sb.append(" as SHOZOKU_KA, ");
+			sb.append(" CASE s.SHOZOKU_KAKARI ");
+			sb.append(" When '（なし）' Then '' ");
+			sb.append(" ELSE s.SHOZOKU_KAKARI END ");
+			sb.append(" as SHOZOKU_KAKARI, ");
+			sb.append(" CONCAT(s.SHOZOKU_LEADER, ':', e.EMPLOYEE_NAME) as SHOZOKU_LEADER ");
+			sb.append(" FROM shozoku s ");
+			sb.append(" LEFT OUTER JOIN employee e ");
+			sb.append(" ON s.SHOZOKU_LEADER = e.EMPLOYEE_NO ");
+			sb.append(" ORDER BY s.SHOZOKU_CODE; ");
+			//SQLをセットし実行する
+			String sql = sb.toString();
+
+			logger.debug("所属リスト取得SQL：" + sql);
+
+			rs = stmt.executeQuery(sql);
+
+			ArrayList<Shozoku> szkItiran = new ArrayList<Shozoku>();
+
+//				ループ文で取り出し、セットを実行する
+			while(rs.next()) {
+				//オブジェクトの生成
+				Shozoku sh = new Shozoku();
+
+				//所属コードのセット
+				int sh_code = rs.getInt("SHOZOKU_CODE");
+				sh.setShozoku_code(sh_code);
+
+				//所属部のセット
+				String sh_bu = rs.getString("SHOZOKU_BU");
+				sh.setShozoku_bu(sh_bu);
+
+				//所属課のセット
+				String sh_ka = rs.getString("SHOZOKU_KA");
+				sh.setShozoku_ka(sh_ka);
+
+				//所属係のセット
+				String sh_kakari = rs.getString("SHOZOKU_KAKARI");
+				sh.setShozoku_kakari(sh_kakari);
+
+				//所属リーダーのセット
+				String sh_leader = rs.getString("SHOZOKU_LEADER");
+				sh.setShozoku_leader(sh_leader);
+
+//					sh.printName();
+
+				szkItiran.add(sh);
+			}
+			return szkItiran;
+
+		}finally {
+			rs.close();
+			stmt.close();
 			conn.close();
 		}
 	}
