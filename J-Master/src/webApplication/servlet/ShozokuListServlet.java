@@ -100,10 +100,6 @@ public class ShozokuListServlet extends CommonServlet{
 				szkItiran.add(sh);
 
 			}
-			// ArrayListの中身をループで取り出して出力
-			for(Shozoku shzk : szkItiran) {
-				shzk.kakunin();
-			}
 
 			req.setAttribute("ShozokuList", szkItiran);
 
@@ -120,7 +116,6 @@ public class ShozokuListServlet extends CommonServlet{
 				rs.close();
 				stmt.close();
 			} catch (SQLException e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			}
 		}

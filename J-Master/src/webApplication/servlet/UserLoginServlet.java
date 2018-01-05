@@ -53,8 +53,8 @@ public class UserLoginServlet extends HttpServlet {
 			if("on".equals(isSaveCookie)) {
 				// クッキー作成
 				Cookie cookie = new Cookie("user_id",req.getParameter("id"));
-				cookie.setMaxAge(365 * 24 * 60 * 60);	//１年
-//				cookie.setMaxAge(180);	//
+				cookie.setMaxAge(365 * 24 * 60 * 60);	//保持する時間：１年
+
 				resp.addCookie(cookie);
 			}
 

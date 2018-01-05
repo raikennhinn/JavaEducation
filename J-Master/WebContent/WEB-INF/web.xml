@@ -193,4 +193,22 @@
     <url-pattern>/EmployeeSearch/</url-pattern>
   </servlet-mapping>
 
+      <servlet>
+   <servlet-name>CSVDownload</servlet-name>
+   <servlet-class>webApplication.servlet.CSVDownloadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CSVDownload</servlet-name>
+    <url-pattern>/CSVDownload/</url-pattern>
+  </servlet-mapping>
+
+      <servlet>
+   <servlet-name>CSVReadInsert</servlet-name>
+   <servlet-class>webApplication.servlet.CSVReadInsertServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CSVReadInsert</servlet-name>
+    <url-pattern>/CSVReadInsert/</url-pattern>
+  </servlet-mapping>
+
 </web-app>

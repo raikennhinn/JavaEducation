@@ -118,35 +118,6 @@
 
 		//入力チェック→どちらかが未入力の場合の判定に切り替える
 		//フォーカスはIDにそろえる
-		//IDが未入力ではなく、パスワードが入力されていなかった場合→パスのみフォーカス、カラー
-		//3タイプ　IDが入っていてなくてPASSが入っている
-// 		if(id == ''){
-// 			if(pass != ''){
-// 				alert(id_label + "${mes_minyuryoku1}");
-// 				id.focus();
-// 				id.style.backgroundColor = ErrColor;
-// 				return;
-// 			}
-// 		}
-// 		//IDがはいっていてPASSがはいっていない
-// 		if(id != ''){
-// 			if(pass == ''){
-// 				alert(pass_label + "${mes_minyuryoku1}");
-// 				pass.focus();
-// 				pass.style.backgroundColor = ErrColor;
-// 				return;
-// 			}
-// 		}
-// 		//IDもPASSも入っていない
-// 		if(id == ''){
-// 			if(pass == ''){
-// 				alert(id_label + "${mes_minyuryoku2}");
-// 				id.focus();
-// 				id.style.backgroundColor = ErrColor;
-// 				pass.style.backgroundColor = ErrColor;
-// 				return;
-// 			}
-// 		}
 		if(id.value == "" && pass.value == "") {	//id × pass ×
 			alert("${mes_minyuryoku2}");
 			id.style.backgroundColor = ErrColor;
@@ -168,6 +139,7 @@
 			login_form.submit();
 		}
 	}
+
 
 </script>
 </head>
@@ -202,7 +174,7 @@
 
 <c:if test="${flg}">
 <img id="shain_animation" src="../img/kaisya_nakayoshi.png" />
-<div id="input_space_animation">
+<div id="input_space_animation" >
 </c:if>
 <c:if test="${!flg}">
 <img id="shain" src="../img/kaisya_nakayoshi.png" />
@@ -219,7 +191,5 @@
 
 </div>
 </body>
-	<!-- EmployeeInputCheckを活用する -->
-	<!--<script src="../js/LoginCheck.js" type="text/javascript">
-	</script>-->
+
 </html>

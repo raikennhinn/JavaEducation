@@ -31,14 +31,14 @@ public class ShainTourokuServlet extends CommonServlet{
 //		req.setCharacterEncoding("UTF-8");
 
 		//トークンの照合
-		String tokenReq = req.getParameter("token");
-		String tokenSes = (String)hpSession.getAttribute("token");
-		if(tokenReq == null || tokenSes == null || !tokenReq.equals(tokenSes)) {
-			req.setAttribute("mes", "画面遷移が不正です。");
-			req.setAttribute("flg",false);
-			this.getServletContext().getRequestDispatcher("/jsp/shainTouroku.jsp").forward(req, resp);
-			return;
-		}
+//		String tokenReq = req.getParameter("token");
+//		String tokenSes = (String)hpSession.getAttribute("token");
+//		if(tokenReq == null || tokenSes == null || !tokenReq.equals(tokenSes)) {
+//			req.setAttribute("mes", "画面遷移が不正です。");
+//			req.setAttribute("flg",false);
+//			this.getServletContext().getRequestDispatcher("/jsp/shainTouroku.jsp").forward(req, resp);
+//			return;
+//		}
 
 
 		//setEmployeeUpdateで更新する予定の値をEmployeeクラスにセットする
@@ -60,20 +60,9 @@ public class ShainTourokuServlet extends CommonServlet{
 		// アトリビュートにsetempをセット（キーは"emp"でよい）
 		req.setAttribute("emp", setemp);
 		logger.debug(setemp+"をリクエストにセットしました");
-		/*
-		 * DataSourceによるDBコネクション取得に変更
-//		 */
-//		Connection conn = null;
-//		PreparedStatement ps =null;
-
 
 		//接続
 		try {
-//
-//			conn = DataBaseUtility.conectionDB();
-//
-//			// オートコミットをオフにする
-//			conn.setAutoCommit(false);
 
 			//登録したい従業員Ｎｏが存在するかどうかチェック
 			//存在していた場合は登録は行えない
@@ -118,7 +107,7 @@ public class ShainTourokuServlet extends CommonServlet{
 				req.setAttribute("flg",false);
 			}
 
-			// TODO 更新結果画面jspへの遷移
+
 			this.getServletContext().getRequestDispatcher("/jsp/shainHenkouKekka.jsp").
 			forward(req, resp);
 

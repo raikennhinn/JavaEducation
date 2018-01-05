@@ -12,13 +12,17 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
 import webApplication.util.DataBaseUtility;
-
+/**
+ * 所属を操作するクラス
+ * @author i1621
+ *
+ */
 public class Shozoku {
 	private int shozoku_code;		//所属コード
 	private String shozoku_bu;		//所属部
 	private String shozoku_ka;		//所属課
 	private String shozoku_kakari;	//所属係り
-	private String shozoku_name; 	//所属名
+	private String shozoku_name; 	//所属名（所属部＋所属課+所属係）
 	private String shozoku_leader;  //所属長
 
 	//所属コードのゲッターとセッター
@@ -65,11 +69,7 @@ public class Shozoku {
 	public String pritShozoku(){
 		return "所属コード：" + shozoku_code + " 所属名；" + shozoku_name;
 	}
-	//確認用
-	public void kakunin() {
-		System.out.println(shozoku_code +":"+ shozoku_bu +":"+shozoku_ka+":"+shozoku_kakari+":"+printName());
 
-	}
 
 	public String getShozoku_leader() {
 		return shozoku_leader;
@@ -119,7 +119,13 @@ public class Shozoku {
 			conn.close();
 		}
 	}
-
+	/**
+	 * 引数で受け取った所属コードの所属情報を表示する
+	 * @param ShozokuCode
+	 * @return
+	 * @throws SQLException
+	 * @throws NamingException
+	 */
 	public Shozoku shozokuDeta(int ShozokuCode) throws SQLException, NamingException {
 		//DB接続
 		Connection conn = null;
@@ -221,7 +227,13 @@ public class Shozoku {
 		}
 	}
 
-
+	/**
+	 * 所属情報一覧
+	 * @param logger
+	 * @return
+	 * @throws SQLException
+	 * @throws NamingException
+	 */
 	public ArrayList<Shozoku> allList(Logger logger) throws SQLException, NamingException {
 
 		//必要変数の用意

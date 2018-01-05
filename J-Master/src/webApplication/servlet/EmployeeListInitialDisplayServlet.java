@@ -35,19 +35,11 @@ public class EmployeeListInitialDisplayServlet extends CommonServlet{
 	protected void doServlet(HttpServletRequest req,HttpServletResponse resp, HttpSession hpSession,Logger logger) throws ServletException, IOException{
 
 		logger.info("従業員リスト表示");
-//	HttpServlet {
-//
-//	@Override
-//	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-//		// ロガーインスタンスの生成
-//        Logger logger = Logger.getLogger(EmployeeListServlet.class);
-//        logger.info("開始");
-		//セッションの生成。
-//		HttpSession session = hpSession;
+;
 		int num = 0;
-		/*
+		/**
 		 * JDBC接続～データ取得
+		 * DBへの接続をDataBaseUtilityクラスを使用して実施
 		 */
 		//必要変数の用意
 		Connection conn = null;
@@ -60,35 +52,66 @@ public class EmployeeListInitialDisplayServlet extends CommonServlet{
 			stmt = conn.createStatement();
 
 
-		//１．DBのemployee、shozokuテーブルをすべて結合させた結果を対応するクラスに格納、ArrayListに全件Addする
+//		//１．DBのemployee、shozokuテーブルをすべて結合させた結果を対応するクラスに格納、ArrayListに全件Addする
 			StringBuilder sb = new StringBuilder();
+//			sb.append("SELECT ");
+//			sb.append("  e.employee_no, ");
+//			sb.append("  e.shozoku_code, ");
+//			sb.append("  e.employee_name, ");
+//			sb.append("  e.employee_name_kana, ");
+//			sb.append("  e.sex, ");
+//			sb.append("  e.age, ");
+//			sb.append("  e.birthday,");
+//			sb.append("  e.pref_CD,");
+//			sb.append("  e.address,");
+//			sb.append("  e.mail_address,");
+//			sb.append("  e.note,");
+//			sb.append("  CONCAT( ");
+//			sb.append("    sh.shozoku_bu, ");
+//			sb.append("    CASE sh.shozoku_ka ");
+//			sb.append("      When '（なし）' Then '' ");
+//			sb.append("      Else sh.shozoku_ka ");
+//			sb.append("    END,");
+//			sb.append("    CASE sh.shozoku_kakari ");
+//			sb.append("      When '（なし）' Then '' ");
+//			sb.append("      Else sh.shozoku_kakari ");
+//			sb.append("    END ");
+//			sb.append("  ) as shozoku_name ");
+//			sb.append("FROM employee e ");
+//			sb.append("JOIN shozoku sh ");
+//			sb.append("on e.shozoku_code = sh.shozoku_code ");
+//			sb.append("ORDER BY employee_no");
+
 			sb.append("SELECT ");
-			sb.append("  e.employee_no, ");
-			sb.append("  e.shozoku_code, ");
-			sb.append("  e.employee_name, ");
-			sb.append("  e.employee_name_kana, ");
-			sb.append("  e.sex, ");
-			sb.append("  e.age, ");
-			sb.append("  e.birthday,");
-			sb.append("  e.pref_CD,");
-			sb.append("  e.address,");
-			sb.append("  e.mail_address,");
-			sb.append("  e.note,");
-			sb.append("  CONCAT( ");
-			sb.append("    sh.shozoku_bu, ");
-			sb.append("    CASE sh.shozoku_ka ");
-			sb.append("      When '（なし）' Then '' ");
-			sb.append("      Else sh.shozoku_ka ");
-			sb.append("    END,");
-			sb.append("    CASE sh.shozoku_kakari ");
-			sb.append("      When '（なし）' Then '' ");
-			sb.append("      Else sh.shozoku_kakari ");
-			sb.append("    END ");
-			sb.append("  ) as shozoku_name ");
-			sb.append("FROM employee e ");
-			sb.append("JOIN shozoku sh ");
-			sb.append("on e.shozoku_code = sh.shozoku_code ");
-			sb.append("ORDER BY employee_no");
+			sb.append(" e.employee_no, ");
+			sb.append(" e.shozoku_code, ");
+			sb.append(" e.employee_name, ");
+			sb.append(" e.employee_name_kana, ");
+			sb.append(" e.sex, ");
+			sb.append(" e.age, ");
+			sb.append(" e.birthday, ");
+			sb.append(" e.pref_CD, ");
+			sb.append(" t.PREF_NAME, ");
+			sb.append(" e.address, ");
+			sb.append(" e.mail_address, ");
+			sb.append(" e.note, ");
+			sb.append(" CONCAT( ");
+			sb.append(" sh.shozoku_bu, ");
+			sb.append(" CASE sh.shozoku_ka ");
+			sb.append(" When '（なし）' Then '' ");
+			sb.append(" Else sh.shozoku_ka ");
+			sb.append(" END, ");
+			sb.append(" CASE sh.shozoku_kakari ");
+			sb.append(" When '（なし）' Then '' ");
+			sb.append(" Else sh.shozoku_kakari ");
+			sb.append(" END ");
+			sb.append(" ) as shozoku_name ");
+			sb.append(" FROM employee e ");
+			sb.append(" JOIN shozoku sh ");
+			sb.append(" on e.shozoku_code = sh.shozoku_code ");
+			sb.append(" LEFT JOIN t01prefecture t ");
+			sb.append(" on e.pref_CD = t.pref_CD ");
+			sb.append(" ORDER BY employee_no ");
 
 			String sql = sb.toString();
 
@@ -101,6 +124,7 @@ public class EmployeeListInitialDisplayServlet extends CommonServlet{
 			while(rs.next()) {
 				Employee emp = new Employee();					//Employeeクラスのオブジェクトを生成
 				Shozoku szk = new Shozoku();					//Shozokuクラスのオブジェクトを生成
+				Prefecture pref = new Prefecture();
 
 				int code = rs.getInt("employee_no");				//社員コード
 				emp.setEmployee_no(code);						//Employee にセット
@@ -134,6 +158,8 @@ public class EmployeeListInitialDisplayServlet extends CommonServlet{
 
 				//追加分
 				emp.setPref_CD(rs.getInt("pref_CD"));			//都道府県コード
+
+				emp.setPrefName(rs.getString("PREF_NAME"));		//都道府県名
 
 				emp.setAddress(rs.getString("address"));		//住所
 

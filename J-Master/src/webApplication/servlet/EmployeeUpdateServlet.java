@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import webApplication.bean.Employee;
 import webApplication.bean.Shozoku;
+import webApplication.bean.SystemUser;
 import webApplication.util.MessegeUtility;
 
 public class EmployeeUpdateServlet extends CommonServlet{
@@ -64,13 +65,16 @@ public class EmployeeUpdateServlet extends CommonServlet{
 				return;
 			}
 
-			//SQLを実行し、更新を行う。
-			update = setemp.updateSQL();
+
+			/**
+			 * SQLを実行し、更新を行う。
+			 * adminにセッションに入れていたログイン情報を入れて、名前のみ引数として渡す
+			 */
+			SystemUser admin = (SystemUser) hpSession.getAttribute("login_info");
+			update = setemp.updateSQL(admin.getName());
 			logger.debug("SQLを実行、更新"+update);
 
 			//updateの数値によって更新できたかどうか判断をおこなう
-
-
 			if(update == 1) {
 				//成功した;
 //				req.setAttribute("mes", "従業員の更新に成功しました");//メッセージをDBから取得

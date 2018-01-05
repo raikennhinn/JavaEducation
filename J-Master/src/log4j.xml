@@ -14,7 +14,7 @@
    </appender>
 
    <appender name="file" class="org.apache.log4j.RollingFileAppender">
-      <param name="File" value="/J-Master_log/J-Master.log" />
+      <param name="File" value="webapps/J-Master/log/J-Master.log" />
       <param name="Encoding" value="UTF-8" />
       <param name="MaxFileSize" value="1MB" />
       <param name="MaxBackupIndex" value="10" />

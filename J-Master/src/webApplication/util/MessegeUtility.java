@@ -10,11 +10,14 @@ import javax.naming.NamingException;
 
 public class MessegeUtility {
 
-
-	//DBからキー、エラーメッセージを取得
-//	 * ①単独メッセージ取得メソッド
-//		①-1) メッセージID一つを引数に、そのIDに対応するメッセージ本文を返却する
-
+	/**
+	 * ①単独メッセージ取得メソッド
+	 * メッセージID一つを引数に、そのIDに対応するメッセージ本文を返却する
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 * @throws NamingException
+	 */
 	public static String message1(String id) throws SQLException, NamingException {
 		// ０．DB接続してconnectionを返却するメソッドを別途つくる
 //		DataBaseUtility dbu = new DataBaseUtility();
@@ -73,8 +76,14 @@ public class MessegeUtility {
 	}
 
 
-//		②複数メッセージMap取得メソッド
-//		②-1) 複数メッセージIDを引数（可変長引数）に、それらIDをキー、メッセージ本文を値としたメッセージ情報Mapを返却する
+	/**
+	 * ②複数メッセージMap取得メソッド
+	 * 複数メッセージIDを引数（可変長引数）に、それらIDをキー、メッセージ本文を値としたメッセージ情報Mapを返却する
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 * @throws NamingException
+	 */
 	public static HashMap<String, String> message2(String... id) throws SQLException, NamingException {
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -143,11 +152,13 @@ public class MessegeUtility {
 		}
 	}
 
-
-
-
-//		③全件メッセージMap取得メソッド
-//		③-1) IDをキー、メッセージ本文を値としたデータベース全件のメッセージ情報のMapを返却する
+	/**
+	 * ③全件メッセージMap取得メソッド
+	 * ③-1) IDをキー、メッセージ本文を値としたデータベース全件のメッセージ情報のMapを返却する
+	 * @return
+	 * @throws SQLException
+	 * @throws NamingException
+	 */
 	public static HashMap<String, String> message3() throws SQLException, NamingException {
 		Connection conn = null;
 		PreparedStatement ps = null;

@@ -11,7 +11,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 public class ReturnMenuServlet extends CommonServlet {
-
+	/**
+	 * メニュー画面へ戻るサーブレット
+	 * 従業員一覧画面から遷移する際にlogin_info以外のセッションを破棄する
+	 */
 	@Override
 	protected void doServlet(HttpServletRequest req, HttpServletResponse resp, HttpSession hpSession, Logger logger)
 			throws ServletException, IOException {

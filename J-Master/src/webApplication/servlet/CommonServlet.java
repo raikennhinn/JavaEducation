@@ -31,7 +31,11 @@ abstract class CommonServlet extends HttpServlet {
 	 * doGetメソッドdoPostメソッドどちらからも呼ばれる、共通のメソッド。以下の処理を行う。
 	 * ①-1) ②のセッションチェック処理を呼ぶ
 	 * ①-2) ロガーの作成を行う
+	 *     org.apache.log4j.Loggerクラスのインスタンスloggerを生成する。log4j.xmlの設定値は別シート「設定ファイル　設定値」参照。
 	 * ①-3) ③doServleｔメソッドを呼ぶ
+	 * 	     ①doGetメソッド、doPostメソッド（finalを付加。オーバーライドを許可しない）
+	 * 		  doGetメソッドdoPostメソッドどちらが呼ばれても、共通のメソッドを呼び、以下の処理を行う。
+	 *
 	 * @param req
 	 * @param resp
 	 * @throws ServletException
@@ -63,15 +67,21 @@ abstract class CommonServlet extends HttpServlet {
 	}
 
 
-	//	①doGetメソッド、doPostメソッド（finalを付加。オーバーライドを許可しない）
-	// doGetメソッドdoPostメソッドどちらが呼ばれても、共通のメソッドを呼び、以下の処理を行う。
-
-	//	①-1) ②のセッションチェック処理を呼ぶ
-	//	②セッションチェック処理
-	//	セッション保持しているログイン情報（セッションキー：login_info）が存在するかチェックする
-	//	存在しない場合、すべてのセッション情報を破棄（session.invalidateメソッドを実行）して、ログイン画面(0001)に遷移する。（共通処理は終了）
-	//  ろぐあうとさーぶれっと
-	//セッションチェックを行う共通のメソッド
+	/**
+	 * セッション保持しているログイン情報が存在するかチェック
+	 * ①-1) ②のセッションチェック処理を呼ぶ
+	 * ②セッションチェック処理
+	 * セッション保持しているログイン情報（セッションキー：login_info）が存在するかチェックする
+	 * 存在しない場合、すべてのセッション情報を破棄（session.invalidateメソッドを実行）して、ログイン画面(0001)に遷移する。（共通処理は終了）
+	 * セッションチェックを行う共通のメソッド
+	 * @param req
+	 * @param resp
+	 * @param session
+	 * @param logger
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private boolean sessionCheck(HttpServletRequest req, HttpServletResponse resp,
 			HttpSession session, Logger logger) throws ServletException, IOException {
 
@@ -94,17 +104,21 @@ abstract class CommonServlet extends HttpServlet {
         return true;
 
 	}
-	//	①-2) ロガーの作成を行う
-	//	org.apache.log4j.Loggerクラスのインスタンスloggerを生成する。log4j.xmlの設定値は別シート「設定ファイル　設定値」参照。
-//	public void LoggerCreate(Logger logger) {
-//		logger = Logger.getLogger(CommonServlet.class);
-//	}
 
-	//	③doServletメソッド
-	//	抽象メソッド。HttpServletRequest、HttpServletResponse、HttpSession、Loggerのオブジェクトを引数に持つ。
-	//	ServletExceptionとIOExceptionをthrowsする（doGetやdoPostと同じ）
-	//	CommonServletクラスを継承したサブクラスは、このメソッドをオーバーライドして、具体的な処理を記述する。
-	//抽象メソッド引数を入れる
+
+	/**
+	 * 抽象メソッド。HttpServletRequest、HttpServletResponse、HttpSession、Loggerのオブジェクトを引数に持つ
+	 * CommonServletクラスを継承したサブクラスは、このメソッドをオーバーライドして、具体的な処理を記述する。
+	 * ③doServletメソッド
+	 * 抽象メソッド引数を入れる
+	 * ServletExceptionとIOExceptionをthrowsする（doGetやdoPostと同じ）
+	 * @param req
+	 * @param resp
+	 * @param hpSession
+	 * @param logger
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	abstract protected void doServlet(HttpServletRequest req,HttpServletResponse resp,HttpSession hpSession,Logger logger) throws ServletException, IOException;
 	//他のサーブレットで、継承して実施を行う。
 

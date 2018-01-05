@@ -13,7 +13,9 @@ import org.apache.log4j.Logger;
 import webApplication.bean.Employee;
 
 public class SortServlet extends CommonServlet {
-
+	/**
+	 * ソートを実行するサーブレット
+	 */
 	@Override
 	protected void doServlet(HttpServletRequest req, HttpServletResponse resp, HttpSession hpSession, Logger logger)
 			throws ServletException, IOException {
@@ -47,19 +49,12 @@ public class SortServlet extends CommonServlet {
 		}
 
 		//・EmployeeのリストをEmployeeのソートメソッドに渡し、ソートを実行する
-		//Employee emp =new Employee();
-		//3（デフォルトに戻したい以外の場合はコンペア実施）
 		if(UpDown != UPDOWM_DEFAULT) {
 			Employee.EmployeeSort(employeeList,category,UpDown);
 		}
 
-		//TODO:日付の比較の場合
-//		for(int i = 0; i < employeeList.size(); i++) {
-//			if(employeeList.get(i).getBirthday().toString().equals("1000/01/01")) {
-//				employeeList.get(i).setBirthday(null);
-//			}
-//		}
-		//↑と同じ動作を拡張For文で実現する
+
+		//拡張For文で実現する
 		for(Employee emp : employeeList ) {
 			if(emp.getBirthdayAtSlash().equals("1000/01/01")) {
 				emp.setBirthday(null);
@@ -70,8 +65,6 @@ public class SortServlet extends CommonServlet {
 		//再表示する前に、一度セッションに入れる。
 		hpSession.setAttribute("employee_list", employeeList);
 
-		//req.setAttribute("empList",employeeList.subList(0,15));
-		//再描画時に必要
 		if(employeeList.size() <= 15) {
 			req.setAttribute("empList", employeeList);
 		}else {
@@ -80,11 +73,9 @@ public class SortServlet extends CommonServlet {
 
 
 
-		//TODO:ページャ関連のデータを1ページ目の状態に戻す
 		//現在ページを1として、セッションの保存
 		hpSession.setAttribute("current_page_no", 1);
 
-		//TODO:昇順、降順、デフォルト、の3択（増える）数字で判断→0デフォルト、1昇順、2降順
 
 		//今回動作させた項目名を記録しておく
 		hpSession.setAttribute("category", category);

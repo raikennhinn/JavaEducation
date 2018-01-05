@@ -8,7 +8,11 @@ import java.sql.SQLException;
 import javax.naming.NamingException;
 
 import webApplication.util.DataBaseUtility;
-
+/**
+ * ユーザー情報の確認
+ * @author i1621
+ *
+ */
 public class SystemUser {
 	/*
 	 * ・ID
@@ -64,8 +68,15 @@ public class SystemUser {
 	}
 
 
-	//loginメソッドを作成
-	//ないようとして、SystemUserオブジェクトにユーザ情報やログイン成否（True/False）をセットして、メソッド呼び出し元に返却
+	/**
+	 * loginメソッド
+	 * 引数としてIDとPASSを受け取り、system_userに存在するかどうかを確認
+	 * SystemUserオブジェクトにユーザ情報やログイン成否（True/False）をセットして、メソッド呼び出し元に返却
+	 * @param id
+	 * @param pass
+	 * @throws SQLException
+	 * @throws NamingException
+	 */
 	public void  userCheck(String id,String pass) throws SQLException, NamingException {
 		//引数としてパスとＩＤを受け取り
 		//ＤＢで検索を実行

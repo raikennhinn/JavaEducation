@@ -28,11 +28,8 @@ public class ShainTourokuInitServlet extends CommonServlet{
 
 		logger.info("社員登録開始");
 
-	 	//if　req.getParameter("employee_no")がnullの場合、メッセージを取得して返す
 		//メッセージ情報の取得
 		try {
-			// そもそもServletを初期表示用と登録用に分ければ、この判定は必要ない
-//			if(req.getParameter("employee_no") == null) {
 				HashMap<String, String> mes;
 				mes = MessegeUtility.message2(
 						"ECOMMON01",

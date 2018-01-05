@@ -15,6 +15,7 @@ import webApplication.bean.Employee;
 public class EmployeeListPagerServlet extends CommonServlet {
 
 	/**
+	 * ページ移動を実行するサーブレット
 	 * @Override
 	 */
 	protected void doServlet(HttpServletRequest req, HttpServletResponse resp, HttpSession hpSession, Logger logger)
@@ -39,7 +40,6 @@ public class EmployeeListPagerServlet extends CommonServlet {
 		if(endData > employeeList.size()) {
 			endData = employeeList.size();
 		}
-		//req.setAttribute("empList",employeeList.subList(0,15));
 		req.setAttribute("empList", employeeList.subList(data,endData));
 
 		//４．current_page_noをクリックされたページャーのページ番号に変更する

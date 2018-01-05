@@ -11,7 +11,7 @@
 <script>
 
 // ラジオボタンを選択したときに、選択値をhiddenに格納する
-function selectEmployee(employee) {
+function selectEmployee(employee,id) {
 	// 引数のemployeeを、hidden項目「selection」にセット
 
 	// HTML文書中のform要素name指定で取得
@@ -26,6 +26,9 @@ function selectEmployee(employee) {
 	// デバッグ用
 	var emp_employee2 = emp_form.elements['selection2'];
 	emp_employee2.value = employee;
+
+	var id = document.getElementById(id);
+	id.checked = true ;
 }
 
 // 選択されたラジオボタンの情報を親画面に返す
@@ -34,6 +37,13 @@ function returnParentWindow() {
 	var emp_form = document.forms['empNoSelect'];
 	var emp_employee = emp_form.elements['selection'];
 	var select = emp_employee.value;
+
+	//選択したラジオボタンがなかった場合
+	if(select == 0){
+		alert("ラジオボタンが選択されていません");
+		return;
+	}
+
 	//文字列分割 --をデリミタ（区切り文字）にして文字列を分ける
 	var emps = select.split('--');
 	var emp_No = emps[0];
@@ -49,31 +59,33 @@ function displayReturn(){
 	window.returnValue = '';
 	window.close();
 }
+
+
 </script>
 
 </head>
 <body>
 	<form name="empNoSelect">
 		<h1>所属長の選択</h1>
-		<div align="right"><a href="javascript:void(0);" onclick="displayReturn();">戻る</a></div>
+		<div align="right" class="LeaderDiv"><a href="javascript:void(0);" onclick="displayReturn();">戻る</a></div>
 		<p><input type="button" value=" 選択 " onclick="returnParentWindow();"></p>
 
-		<table border="1">
+		<table border="1" class="LeaderSelect">
 			<colgroup>
-				<col style="width:50">
-				<col style="width:90">
-				<col style="width:110">
+				<col style="width:50px">
+				<col style="width:90px">
+				<col style="width:110px">
 			</colgroup>
 			<tr>
 				<th>選択</th>
 				<th>従業員No</th>
-				<th>氏　名</th>
+				<th>氏  名</th>
 			</tr>
 			<c:forEach var="emp" items="${employeeList}">
 			<tr>
-				<td><input type="radio" name="employee_no" value="${emp.employee_no}" onclick="selectEmployee('${emp.employee_no}--${emp.employee_name}')"></td>
-				<td>${emp.employee_no}</td>
-				<td>${emp.employee_name}</td>
+				<td><div  class="leaderTable" onclick="selectEmployee('${emp.employee_no}--${emp.employee_name}','leader_${emp.employee_no}')"><input type="radio" name="employee_no" value="${emp.employee_no}" id="leader_${emp.employee_no}"></div></td>
+				<td><div id="leader_${emp.employee_no}" class="leaderTable" onclick="selectEmployee('${emp.employee_no}--${emp.employee_name}','leader_${emp.employee_no}')">${emp.employee_no}</div></td>
+				<td><div id="leader_${emp.employee_no}" class="leaderTable" onclick="selectEmployee('${emp.employee_no}--${emp.employee_name}','leader_${emp.employee_no}')">${emp.employee_name}</div></td>
 			</tr>
 			</c:forEach>
 		</table>

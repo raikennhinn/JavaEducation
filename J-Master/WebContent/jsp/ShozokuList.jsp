@@ -11,7 +11,7 @@
 <script>
 	function selectLeader(shozoku_code, index) {
 		var ret = showModalDialog('../ShozokuLeaderSelect/?ShozokuCode=' + shozoku_code,
-				'', 'dialogHeight:350px;dialogWidth:370px');
+				'', 'dialogHeight:350px;dialogWidth:300px');
 	//	alert("retの種類:" + typeof ret);
 		if (typeof ret != 'object') {
 			return false;
@@ -56,7 +56,7 @@
 		<%@ include file="UserInfoHedder.jsp" %>
 	</div>
 	<div id="main_field">
-	<h1>所属コード一覧</h1>
+	<h2>所属コード一覧</h2>
 	<p><a href="../ReturnMenu/">メニューに戻る</a></p>
 
 	<c:set var="flg" value="${requestScope['flg']}" />
@@ -76,8 +76,15 @@
 		<!-- 所属長の登録を実行する  所属長登録サーブレットへ接続-->
 		<p><input type="button" value="所属長登録" onclick="update()"/></p>
 
-		<table border="1">
-
+		<table border="1" class="shozoku_ListTitle">
+			<colgroup>
+				<col style="width:60px">
+				<col style="width:60px">
+				<col style="width:35px">
+				<col style="width:35px">
+				<col style="width:80px">
+				<col style="width:131px">
+			</colgroup>
 			<tr>
 				<th>所属コード</th>
 				<th>所属部</th>
@@ -86,8 +93,19 @@
 				<th>所属名</th>
 				<th colspan="2">所属長 選択</th>
 			</tr>
-
-		<c:forEach var="sh" items="${ShozokuList}" varStatus="status">
+		</table>
+		<div id="dateBlock">
+		<table class="shozoku_List" border="1" id="dateBlockTable">
+			<colgroup>
+				<col style="width:60px">
+				<col style="width:60px">
+				<col style="width:35px">
+				<col style="width:35px">
+				<col style="width:80px">
+				<col style="width:80px">
+				<col style="width:40px">
+			</colgroup>
+			<c:forEach var="sh" items="${ShozokuList}" varStatus="status">
 			<tr>
 				<td>${sh.shozoku_code}</td>
 				<td>${sh.shozoku_bu}</td>
@@ -104,10 +122,8 @@
 				</td>
 			</tr>
 		</c:forEach>
-
-		<!-- テーブルタグを閉じる -->
 		</table>
-
+		</div>
 	</form>
 	</div>
 </body>

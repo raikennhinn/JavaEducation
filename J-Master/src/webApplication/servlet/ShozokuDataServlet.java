@@ -42,10 +42,6 @@ public class ShozokuDataServlet extends CommonServlet {
 			forward(req, resp);
 
 
-
-
-
-
 		} catch (NumberFormatException | SQLException | NamingException e) {
 			e.printStackTrace();
 		}

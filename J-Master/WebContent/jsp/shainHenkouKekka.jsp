@@ -18,7 +18,7 @@
 	<div id="main_field">
 	<h1>従業員変更結果</h1>
 	<c:set var="emp" value="${requestScope['emp']}" />
-<% // TODO 登録成否メッセージをサーバーから取得して表示。成功か失敗かで色変え。成功失敗は別途フラグで判定（JSTL使用） %>
+
 	<c:set var="flg" value="${requestScope['flg']}" />
 	<c:if test="${flg}">
 		<p>${requestScope['mes']}</p>
@@ -26,7 +26,7 @@
 	<c:if test="${!flg}">
 		<p id="error_msg">${requestScope['mes']}</p>
 	</c:if>
-<% // TODO 式言語を使って値を取得、表示する %>
+
 	<p>社員番号:<c:out value="${emp.employee_no}" escapeXml="true" /></p>
 	<p>所属コード:<c:out value="${emp.shozoku.shozoku_code}" escapeXml="true" /></p>
 	<p>氏名:<c:out value="${emp.employee_name}" escapeXml="true" /></p>
@@ -44,7 +44,7 @@
 	<p>住所:<c:out value="${emp.address}" escapeXml="true" /></p>
 	<p>メールアドレス:<c:out value="${emp.mail_address}" escapeXml="true" /></p>
 	<p>備考:<c:out value="${emp.note}" escapeXml="true" /></p>
-<% // TODO 「従業員一覧画面に戻る」リンクをここに追加 %>
+
 	<a href="../EmployeeList/">従業員一覧に戻る</a>
 	</div>
 </body>

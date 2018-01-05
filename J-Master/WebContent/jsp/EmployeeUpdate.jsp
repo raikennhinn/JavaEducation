@@ -19,8 +19,14 @@
 	<c:set var="mes_suji" value="${mesMap['ECOMMON03']}" />
 	<c:set var="mes_hiduke" value="${mesMap['ECOMMON04']}" />
 	<c:set var="mes_katakana" value="${mesMap['ECOMMON06']}" />
+	<c:set var="emp" value="${requestScope['emp']}" />
 
 	<script>
+	function load(){
+
+		document.getElementById("prefCD_${emp.pref_CD}").selected = true;
+	}
+
 		function checkInput(){
 			//カラーコード変数
 			var ErrColor="#ff5555";
@@ -103,9 +109,11 @@
 				update_form.submit();
 			}
 		}
+
+
 	</script>
 </head>
-<body onLoad="document.update.shozoku_code.focus()">
+<body onLoad="document.update.shozoku_code.focus();load()">
 	<div id="header_field">
 		<%@ include file="UserInfoHedder.jsp" %>
 	</div>
@@ -123,17 +131,17 @@
 	<!-- formタグを使用し、各データのテキストボックスを記述 -->
 	<!-- 初期値（社員コードを元にひっぱってきたデータを表示する） -->
 	<%//従業員コードに関しては、サーブレットから取り出した値を表示すればよいか %>
-	<c:set var="emp" value="${requestScope['emp']}" />
+	<!--<c:set var="emp" value="${requestScope['emp']}" />-->
 
 	<form name="update" target="_self" method="POST" action="../EmployeeUpdate/">
-	<p>従業員No：<label > ${emp.employee_no} </label></p>
+	<p id="Absolutely">従業員No：<label > ${emp.employee_no} </label></p>
 	<c:if test="${flg}">
 		<!--  flgが0だった場合何もしない-->
-		<p>所属コード:<input type="text" style="ime-mode:disabled;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}"></p>
+		<p id="Absolutely">所属コード:<input type="text" style="ime-mode:disabled;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}"></p>
 	</c:if>
 	<c:if test="${!flg}">
 		<!--  flgが1だった場合何もしない-->
-		<p>所属コード:<input type="text" style="ime-mode:disabled; background-color:#ff5555;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}" ></p>
+		<p id="Absolutely">所属コード:<input type="text" style="ime-mode:disabled; background-color:#ff5555;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}" ></p>
 	</c:if>
 
 	<p>氏名:<input type="text" maxlength="30" name="name" size="16" value="${emp.employee_name}"></p>
@@ -166,7 +174,16 @@
 	</c:if>
 	</p>
 	<p>生年月日:<input type="text" name="birthday" size="10" value="${emp.birthdayAtSlash}"></p>
-	<p>都道府県:<input type="text" name="prefecture" size="3" value="${emp.pref_CD}"></p>
+	<!--<p>都道府県:<input type="text" name="prefecture" size="3" value="${emp.pref_CD}"></p>-->
+	<p><c:set var="prefList" value="${sessionScope['prefList']}" />
+			都道府県：<select name="prefecture" >
+			<!-- <option value="0" id="prefCD_0"></option> -->
+				<c:forEach var="prefList" items="${prefList}">
+				<!-- <option ~~~ selected />とすることで、画面表示した時点で選択状態にできる -->
+				<option value="${prefList.prefCode}" id="prefCD_${prefList.prefCode}">${prefList.prefCode}:${prefList.prefName}</option>
+				</c:forEach>
+			</select>
+	</p>
 	<p>住所:<input type="text" name="address" size="50" maxlength="100" value="${emp.address}"></p>
 	<p>メールアドレス:<input type="text" name="mail_address" size="30" maxlength="50" value="${emp.mail_address}"></p>
 	<p>備考:<textarea name="note" cols="20" rows=4>${emp.note}</textarea></p>

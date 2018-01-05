@@ -1,37 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-	<% // TODO ここでJSTLの使用を宣言 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.security.NoSuchAlgorithmException" %>
 <%@ page import="java.security.SecureRandom" %>
 <%
 	String tokenStr = "";
 
-	//トークンの作成
-	final int TOKEN_LENGTH = 16;//16*2=32バイト
+// 	//トークンの作成
+// 	final int TOKEN_LENGTH = 16;//16*2=32バイト
 
- 	//32バイトのCSRFトークンを作成
-    byte token[] = new byte[TOKEN_LENGTH];
-    StringBuffer buf = new StringBuffer();
-    SecureRandom random = null;
+//  	//32バイトのCSRFトークンを作成
+//     byte token[] = new byte[TOKEN_LENGTH];
+//     StringBuffer buf = new StringBuffer();
+//     SecureRandom random = null;
 
-    try {
-      random = SecureRandom.getInstance("SHA1PRNG");
-      random.nextBytes(token);
+//     try {
+//       random = SecureRandom.getInstance("SHA1PRNG");
+//       random.nextBytes(token);
 
-      for (int i = 0; i < token.length; i++) {
-        buf.append(String.format("%02x", token[i]));
-      }
+//       for (int i = 0; i < token.length; i++) {
+//         buf.append(String.format("%02x", token[i]));
+//       }
 
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    }
-    tokenStr = buf.toString();
+//     } catch (NoSuchAlgorithmException e) {
+//       e.printStackTrace();
+//     }
+//     tokenStr = buf.toString();
 
-	if(session.getAttribute("token") == null) {
-	    // トークンをセッションに保存
-	    session.setAttribute("token", tokenStr);
-	}
+// 	if(session.getAttribute("token") == null) {
+// 	    // トークンをセッションに保存
+// 	    session.setAttribute("token", tokenStr);
+// 	}
 %>
 <!DOCTYPE html>
 <html>
@@ -177,14 +176,12 @@
 	</c:if>
 <!-- employeeテーブルの各項目（更新者更新日時を除く）を入力するのに適切なフォームコントロールをそれぞれ記述 -->
 	<form name="shain" target="_self" method="POST" action="../shainTouroku/">
-<% // TODO サーバーでの入力チェックエラーで戻ってきたときに、入力内容がクリアされないようにする %>
-<% // TODO 式言語を使ってrequestに保持された従業員の値を取得、表示する %>
-<% // TODO JSTLで、requestに従業員が保持されているか判定が必要 %>
+
 		<c:set var="emp" value="${requestScope['emp']}" />
-		<p>社員番号:<input type="text" style="ime-mode:disabled;" name="employee_no" size="10" value="${emp.employee_no}"></p>
+		<p id="Absolutely">社員番号:<input type="text" style="ime-mode:disabled;" name="employee_no" size="10" value="${emp.employee_no}"></p>
 
 <!-- 所属コードについては、ひとまず単純なテキストボックスでよい -->
-		<p>所属コード:<input type="text" style="ime-mode:disabled;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}"></p>
+		<p id="Absolutely">所属コード:<input type="text" style="ime-mode:disabled;" maxlength="3" name="shozoku_code" size="4" value="${emp.shozoku.shozoku_code}"></p>
 
 		<p>氏名:<input type="text" name="name" maxlength="30" size="16" value="${emp.employee_name}"></p>
 		<p>氏名カナ：<input type="text" name="namekana" maxlength="60" size="32" value="${emp.employee_namekana}"></p>
@@ -216,8 +213,17 @@
 		</p>
 
 		<p>生年月日:<input type="text" name="birthday" size="10" value="${emp.birthdayAtSlash}"></p>
-		<p>都道府県:<input type="text" name="prefecture" size="3" value="${emp.pref_CD}"></p>
+	<!--  	<p>都道府県:<input type="text" name="prefecture" size="3" value="${emp.pref_CD}"></p> -->
+		<c:set var="prefList" value="${sessionScope['prefList']}" />
+			都道府県：<select name="prefecture" >
+				<option value="0" id="prefCD_0"></option>
+				<c:forEach var="prefList" items="${prefList}">
+				<!-- <option ~~~ selected />とすることで、画面表示した時点で選択状態にできる -->
+				<option value="${prefList.prefCode}" id="prefCD_${prefList.prefCode}">${prefList.prefCode}:${prefList.prefName}</option>
+				</c:forEach>
+			</select>
 		<p>住所:<input type="text" name="address" size="50" maxlength="100" value="${emp.address}"></p>
+
 		<p>メールアドレス:<input type="text" name="mail_address" size="30" maxlength="50" value="${emp.mail_address}"></p>
 		<p>備考:<textarea name="note" cols="20" rows=4>${emp.note}</textarea></p>
 
@@ -235,16 +241,6 @@
 	</form>
 	</div>
 </body>
-
-<!-- 入力チェック。
-　・未入力チェック（必須項目）、
-　・桁数チェック（文字数／バイト数オーバーチェック）（テキストボックス全般）、
-　・数字チェック（数値項目）
-　これらをJavaScriptで行う　-->
-
-
-<!-- 現在employeeUpdate（名称変更予定）へ返る-->
-	<!-- 定義方法<script src="●●.js"></script> jsファイルにうつす-->
 	<script src="../js/EmployeeInputCheck.js" type="text/javascript">
 	</script>
 

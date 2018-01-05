@@ -16,12 +16,17 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
 import webApplication.enumeration.Seibetu;
+import webApplication.servlet.CSVDataCreation;
 import webApplication.util.DataBaseUtility;
 
-public class Employee {
+/**
+ * 従業員関係を操作するクラス
+ * @author i1621
+ *
+ */
+public class Employee implements CSVDataCreation{
 	//変数
 	private int employee_no;		//社員コード
-//	private int shozoku_code;		//所属コード　shozoku（所属オブジェクト）が持っているので不要
 	private String employee_name;	//氏名
 	private String employee_namekana; //かな氏名
 	private String sex;				//性別
@@ -29,6 +34,7 @@ public class Employee {
 	private Date birthday;			//生年月日
 	Shozoku shozoku;				//Shozokuクラスの
 	private  int pref_CD;			//都道府県コード
+	private String prefName;		//都道府県名
 	private String address;			//住所
 	private String mail_address;	//メールアドレス
 	private String note;			//備考欄
@@ -110,12 +116,6 @@ public class Employee {
 
 	}
 
-	//aisatu()メソッド
-	public void aisatu() {
-		System.out.println("社員番号："+employee_no+" 氏名："+employee_name + " " + shozoku.pritShozoku()+" 性別："+sex+" 年齢："+age+" 生年月日"+birthday);
-//		shozoku.pritShozoku();
-	}
-
 //	かな入力の名前と氏名
 	public String getEmployee_namekana() {
 		return employee_namekana;
@@ -129,6 +129,14 @@ public class Employee {
 	}
 	public void setPref_CD(int pref_CD) {
 		this.pref_CD = pref_CD;
+	}
+
+
+	public String getPrefName() {
+		return prefName;
+	}
+	public void setPrefName(String prefName) {
+		this.prefName = prefName;
 	}
 	public String getAddress() {
 		return address;
@@ -292,8 +300,6 @@ public class Employee {
 				//性別
 				int sex = rs.getInt("sex");
 				//性別の結び付け(数を文字へ)を実施する
-//				Seibetu sei = Seibetu.getSeibetu(sex);
-//				String sexStr = sei.getName();					//性別が格納されている
 				emp.setSex(Integer.toString(sex));
 
 				//年齢
@@ -401,7 +407,7 @@ public class Employee {
 	 * @throws SQLException
 	 * @throws NamingException
 	 */
-	public int updateSQL() throws SQLException, NamingException {
+	public int updateSQL(String admin) throws SQLException, NamingException {
 		//DBへの接続実施
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -465,7 +471,7 @@ public class Employee {
 			ps.setString(10, this.mail_address);
 			ps.setString(11, this.note);
 
-			ps.setString(12, "更新者");	// 将来的にはログインユーザ名
+			ps.setString(12, admin);	// 将来的にはログインユーザ名
 
 			ps.setInt(13, this.employee_no);
 			//実行と同時にupdateに値を入れる
@@ -719,7 +725,17 @@ public class Employee {
 			conn.close();
 		}
 	}
-
+	/**
+	 * 絞り込み検索の実施
+	 * @param employeeNO
+	 * @param ShzokuCode
+	 * @param name
+	 * @param prefCode
+	 * @param address
+	 * @param logger
+	 * @return
+	 * @throws Exception
+	 */
 	public ArrayList<Employee> Search(
 			int employeeNO,int ShzokuCode,String name,int prefCode,String address,Logger logger)
 			throws Exception {
@@ -886,9 +902,71 @@ public class Employee {
 
 	}
 
-	//	【Employeeクラス】
-	//	・クラスメソッドとして、Employeeのリストのソートメソッドを実装する
-	//  用いてCollections.sort()を実行する。
+	/**
+	 * CSV出力を実行するために、1行ずつの列をまとめて実行する。
+	 */
+	public String getCSVLine() {
+		//入れた文字列を連結させてサーブレットへ文字列として返す。
+		String LineData;
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("\"");
+		sb.append( this.employee_no );
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append( this.shozoku.getShozoku_code() );
+		sb.append(":");
+		sb.append( this.shozoku.getShozoku_name() );
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append( this.employee_name );
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append( this.sex );
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append( this.age );
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append( this.birthday );
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append( this.PREFECTURE_EMPTY );
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append(this.address);
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append(this.mail_address);
+		sb.append("\"");
+		sb.append(",");
+		sb.append("\"");
+		sb.append(this.note);
+		sb.append("\"");
+		sb.append("\n");
+
+		LineData =  sb.toString();
+
+		return LineData;
+	}
+
+
+	/**
+	 * ・クラスメソッドとして、Employeeのリストのソートメソッドを実装する
+	 *  用いてCollections.sort()を実行する。
+	 * @param employeeList
+	 * @param category
+	 * @param b
+	 */
 	public static void EmployeeSort(List<Employee> employeeList,String category,int b) {
 		//aは項目名、ｂは昇順か降順か。名前変更
 		//サーブレットからパラメータで受け取ったソート項目・昇順or降順にしたがって、必要なComparatorクラスを
@@ -942,6 +1020,7 @@ public class Employee {
 
 		Collections.sort(employeeList, comp);
 	}
+
 }
 
 //【項目別Comparatorクラス】
@@ -958,6 +1037,12 @@ public class Employee {
 //	　　日時項目：日時の大小
 //	　　文字列項目：StringのcompareTo()メソッドをそのまま利用する
 //employeeNo
+/**
+ * 【項目別Comparatorクラス】
+ * 従業員Noの昇順
+ * @author i1621
+ *
+ */
 class ComparatorUpEmployee_no implements Comparator<Employee> {
 
 	@Override
@@ -969,7 +1054,12 @@ class ComparatorUpEmployee_no implements Comparator<Employee> {
 	}
 
 }
-
+/**
+ * 【項目別Comparatorクラス】
+ * 従業員Noの降順
+ * @author i1621
+ *
+ */
 class ComparatorDownEmployee_no implements Comparator<Employee> {
 
 	@Override
@@ -981,7 +1071,12 @@ class ComparatorDownEmployee_no implements Comparator<Employee> {
 	}
 
 }
-//shozokuName
+/**
+ * 【項目別Comparatorクラス】
+ * 所属コードの昇順
+ * @author i1621
+ *
+ */
 class ComparatorUpShozokuName implements Comparator<Employee> {
 
 	@Override
@@ -993,6 +1088,11 @@ class ComparatorUpShozokuName implements Comparator<Employee> {
 	}
 
 }
+/**
+ * 【項目別Comparatorクラス】
+ * 所属コードの降順
+ * @author i1621
+ */
 class ComparatorDownShozokuName implements Comparator<Employee> {
 
 	@Override
@@ -1004,7 +1104,13 @@ class ComparatorDownShozokuName implements Comparator<Employee> {
 	}
 
 }
-//name
+/**
+ * 【項目別Comparatorクラス】
+ * 氏名の昇順
+ * @author i1621
+ *
+ */
+
 class ComparatorUpName implements Comparator<Employee> {
 
 	@Override
@@ -1016,6 +1122,12 @@ class ComparatorUpName implements Comparator<Employee> {
 	}
 
 }
+/**
+ * 【項目別Comparatorクラス】
+ * 氏名の降順
+ * @author i1621
+ *
+ */
 class ComparatorDownName implements Comparator<Employee> {
 
 	@Override
@@ -1026,7 +1138,12 @@ class ComparatorDownName implements Comparator<Employee> {
 		return -(empNo1.getEmployee_name().compareTo(empNo2.getEmployee_name()));
 	}
 }
-//sex
+/**
+ * 【項目別Comparatorクラス】
+ * 性別の昇順
+ * @author i1621
+ *
+ */
 class ComparatorUpSex implements Comparator<Employee> {
 
 	@Override
@@ -1038,6 +1155,12 @@ class ComparatorUpSex implements Comparator<Employee> {
 	}
 
 }
+/**
+ * 【項目別Comparatorクラス】
+ * 性別の降順
+ * @author i1621
+ *
+ */
 class ComparatorDownSex implements Comparator<Employee> {
 
 	@Override
@@ -1049,7 +1172,12 @@ class ComparatorDownSex implements Comparator<Employee> {
 	}
 
 }
-//age
+/**
+ * 【項目別Comparatorクラス】
+ * 年齢の昇順
+ * @author i1621
+ *
+ */
 class ComparatorUpaAge implements Comparator<Employee> {
 
 	@Override
@@ -1061,6 +1189,12 @@ class ComparatorUpaAge implements Comparator<Employee> {
 	}
 
 }
+/**
+ * 【項目別Comparatorクラス】
+ * 年齢の降順
+ * @author i1621
+ *
+ */
 class ComparatorDownaAge implements Comparator<Employee> {
 
 	@Override
@@ -1072,7 +1206,12 @@ class ComparatorDownaAge implements Comparator<Employee> {
 	}
 
 }
-//birthday
+/**
+ * 【項目別Comparatorクラス】
+ * 誕生日の昇順
+ * @author i1621
+ *
+ */
 class ComparatorUpBirthday implements Comparator<Employee> {
 
 	@Override
@@ -1097,7 +1236,12 @@ class ComparatorUpBirthday implements Comparator<Employee> {
 	}
 
 }
-
+/**
+ * 【項目別Comparatorクラス】
+ * 誕生日の降順
+ * @author i1621
+ *
+ */
 class ComparatorDownBirthday implements Comparator<Employee> {
 
 	@Override

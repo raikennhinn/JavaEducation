@@ -44,8 +44,6 @@ public class ShozokuLeaderSelectServlet extends CommonServlet {
 			forward(req, resp);
 
 
-
-
 		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		}

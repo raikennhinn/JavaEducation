@@ -57,27 +57,30 @@ public class UserLoginInitServlet extends HttpServlet {
 		} catch (NamingException e1) {
 			e1.printStackTrace();
 		}
-
-
-
-
 	}
 
-	/**
-	 * ログイン失敗時に渡されて移動する先としてdoPostを使用する
-	 * E000102　入力されたユーザIDもしくはパスワードが正しくありませんが前処理から送られてくる
-	 */
+	 /**
+	  *  ログイン失敗時に渡されて移動する先としてdoPostを使用する
+	  *  E000102　入力されたユーザIDもしくはパスワードが正しくありませんが前処理から送られてくる
+	  */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//ログインエラーメッセージの取得　ログイン失敗時
-		//引数でもらってきたエラーメッセージのみの取得の実施？
 		//MessegeUtilityクラスのmessage2メソッドからメッセージを取得
 		try {
 			//メッセージ3種を取得
-				String mes;
-				mes = MessegeUtility.message1(String.valueOf(req.getAttribute("mes")));
+//				String mes;
+//				mes = MessegeUtility.message1(String.valueOf(req.getAttribute("mes")));
+//				req.setAttribute("mes", mes);
+//				req.setAttribute("flg", req.getAttribute("flg"));
+
+				HashMap<String, String> mes;
+				mes = MessegeUtility.message2(
+						"ECOMMON01",
+						"E000101",
+						"E000102"
+						);
 				req.setAttribute("mesMap", mes);
-				req.setAttribute("flg", req.getAttribute("flg"));
 
 				//更新画面へ返さず、引数でもらったエラーIDの使用し、エラーメッセージを表示する
 				this.getServletContext().getRequestDispatcher("/jsp/0001_login.jsp").

@@ -12,6 +12,11 @@ import org.apache.log4j.Logger;
 
 import webApplication.util.DataBaseUtility;
 
+/**
+ * 都道府県を操作するクラス
+ * @author i1621
+ *
+ */
 public class Prefecture {
 
 	//変数宣言

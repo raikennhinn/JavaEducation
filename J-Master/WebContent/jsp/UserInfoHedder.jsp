@@ -1,11 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!-- <!DOCTYPE html> -->
-<!-- <html> -->
-<!-- <head> -->
-<!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> -->
-<!-- <title>User</title> -->
+
 
 <script type="text/javascript">
 
@@ -35,6 +31,7 @@ function logout_action(){
 #logout_link {
 	color:#00ff00;
 }
+
 </style>
 <!-- </head> -->
 <!-- <body> -->

@@ -4,7 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="webApplication.bean.Employee" %>
 <%@ page import="webApplication.util.HTMLUtility" %>
-<!DOCTYPE html">
+<!DOCTYPE html>
 <html>
 <head>
 	<title>従業員リスト</title>
@@ -67,7 +67,7 @@
 		if("${category}" == id){
 			return;
 		}
-			document.getElementById(id).style.backgroundColor = "white";
+		document.getElementById(id).style.backgroundColor = "white";
 	}
 
 	function MousOnClick(id,sort,select){
@@ -109,8 +109,55 @@
 		empNoUp_form.submit();
 	}
 
+	function tableMouseOver(id){
+		document.getElementById(id).style.backgroundColor = "#00FFFF";
+		//id.idではなかったほうのidも一緒に反応するように変更body_
+		if(id.indexOf('body_') != -1){
+			var subid = id.substring(5);
+			document.getElementById('head_'+subid).style.backgroundColor = "#00FFFF";
+		}
+		if(id.toString().indexOf('head_') != -1){
+			var subid = id.substring(5);
+			document.getElementById('body_'+subid).style.backgroundColor = "#00FFFF";
+		}
+	}
 
+	function tableMouseOut(id){
+		document.getElementById(id).style.backgroundColor = "";
+		//id.idではなかったほうのidも一緒に反応するように変更body_
+		if(id.indexOf('body_') != -1){
+			var subid = id.substring(5);
+			document.getElementById('head_'+subid).style.backgroundColor = "";
+		}
+		if(id.indexOf('head_') != -1){
+			var subid = id.substring(5);
+			document.getElementById('body_'+subid).style.backgroundColor = "";
+		}
+	}
 
+	function radioPush(id){
+		var id = document.getElementById(id);
+		id.checked = true ;
+	}
+
+	function CSVdownload(){
+		myRet = confirm( "CSVをダウンロードします" );
+		if(myRet == true){
+		location.href = "../CSVDownload/";
+		}else{
+			return;
+		}
+	}
+
+	function CSVreadInsert(){
+		myRet = confirm( "CSVをデータベースに登録します" );
+		if(myRet == true){
+		location.href = "../CSVReadInsert/";
+		}else{
+			return;
+		}
+
+	}
 	</script>
 </head>
 <body>
@@ -118,7 +165,7 @@
 		<%@ include file="UserInfoHedder.jsp" %>
 	</div>
 	<div id="main_field">
-		<form name="empNoUpdate" target="_self" method="POST">
+		<form name="empNoUpdate" target="_self" method="POST" enctype="multipart/form-data">
 			<!-- 見出しとして、「従業員リスト」の文字列を出力（ある程度スタイルを設定して） -->
 			<!-- <h1 align="center">従業員リスト</h1> -->
 
@@ -166,7 +213,14 @@
 				住所：<input type="text"  name="addressSearch" size="30" maxlength="60" value="${sessionScope['addressSearch']}"></p>
 
 				<p><input type="button" value=" 検索 " name="searchButton" onclick="search()">
-				<input type="reset" name="clear" value=" クリア "  ></p>
+				<input type="reset" name="clear" value=" クリア "  >
+				<!-- <span id="csvbutton"><input disabled type="button" value =" CSV出力 " name="CSVdl" ></span> -->
+				<span id="csvbutton">
+					<input type="file" name="filefd" />
+ 					<input type="button" value="CSV読込" onclick="CSVreadInsert()" name="csvRead"/>
+					<input type="button" value =" CSV出力 " name="CSVdl" onclick="CSVdownload()">
+				</span>
+				</p>
 			</div>
 			<div><hr></div>
 
@@ -205,12 +259,8 @@
 					<input type="button" value="削除" name="deleteButton" onclick="check('../EmployeeDelete/')">
 				</span>
 			</div>
-			<!-- テーブル形式で全件表示。テーブルヘッダ行も表示する -->
-			<!-- まずはテーブルタグとテーブルヘッダタグを普通に書く -->
 
-			<%// TODO 新規登録ボタン、更新ボタン、削除ボタンを追加 %>
-			<%// TODO 従業員選択ラジオボタンを列に追加 %>
-			<%// TODO ラジオボタンの値には従業員Noを設定 %>
+
 			<!-- セッションの保存されたsortを取得する-->
 			<c:set var="sort" value="${sessionScope['sort']}" />
 			<div id="all_area">
@@ -257,19 +307,21 @@
 				</c:if>
 
 				<!-- falseだったら、文字列のみの表示 -->
-				<c:if test="${!detaflg}">
-					<div id="titleXBlock">
-						<table border="1" id="titleXYBlockTable" class="tableFontSize">
-							<colgroup >
-								<col style="width:50">
-								<col style="width:60">
-							</colgroup>
-							<tr>
-								<th>更新</th>
-								<th>社員番号</th>
-							<tr>
-						</table>
 
+				<c:if test="${!detaflg}">
+					<div id="titleXzeroXYBlock">
+					<table border="1" id="titleZeroXYBlockTable" class="tableFontSize" >
+						<colgroup >
+							<col style="width:50px">
+							<col style="width:60px">
+						</colgroup>
+						<tr>
+							<th>更新</th>
+							<th>社員番号</th>
+						<tr>
+					</table>
+					</div>
+					<div id="titleXzeroBlock">
 						<table border="1" id="titleXBlockTable" class="tableFontSize">
 							<colgroup >
 								<col style="width:130px">
@@ -296,24 +348,27 @@
 						</table>
 					</div>
 				</c:if>
-
+				<!-- データが存在する場合のみ表示を行うように変更12/11 -->
+				<c:if test="${detaflg}">
 				<!-- テーブル行タグの前後をfor文のスクリプトレットではさんで、データ件数文タグとデータを表示する -->
 				<!-- データ各項目を出力するのもスクリプトレットで -->
 				<div id="dataYBlock">
-					<table border="1" class="tableFontSize">
+					<table border="1" class="tableFontSize" >
 						<colgroup>
-							<col style="width:50">
-							<col style="width:60">
+							<col style="width: 50px;">
+							<col style="width: 60px;">
+
 						</colgroup>
 						<c:forEach var="emp" items="${empList}">
-							<tr>
-								<td><input type="radio" name="empNoUp" value="${emp.employee_no}" ></td>
-								<td><c:out value="${emp.employee_no}" escapeXml="true"/></td>
+							<tr id="head_${emp.employee_no}" onmouseover="tableMouseOver('head_${emp.employee_no}')" onmouseout="tableMouseOut('head_${emp.employee_no}')">
+								<td><div class="tableColumn"  onclick="radioPush('labelId_${emp.employee_no}')"><input type="radio" name="empNoUp" value="${emp.employee_no}" id="labelId_${emp.employee_no}"></div></td>
+								<td><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><c:out value="${emp.employee_no}" escapeXml="true" /></div></td>
 							</tr>
 						</c:forEach>
 					</table>
 				</div>
-
+				</c:if>
+				<c:if test="${detaflg}">
 				<div id="dataXBlock" onscroll="scroll();">
 					<table border="1" id="dataXBlockTable" class="tableFontSize">
 						<colgroup>
@@ -328,27 +383,29 @@
 							<col style="width:300px">
 						</colgroup>
 						<c:forEach var="emp" items="${empList}">
-							<tr>
-								<td title="${emp.shozoku.shozoku_code} ${emp.shozoku.shozoku_name}"><div class="tableColumn"><a href="javascript:void(0);" onclick="showModalDialog('../ShozokuData/?ShozokuCode=${emp.shozoku.shozoku_code}', '', 'dialogHeight:270px;dialogWidth:260px');">
+							<tr id="body_${emp.employee_no}" onmouseover="tableMouseOver('body_${emp.employee_no}')" onmouseout="tableMouseOut('body_${emp.employee_no}')">
+								<td title="${emp.shozoku.shozoku_code} ${emp.shozoku.shozoku_name}"><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><a href="javascript:void(0);" onclick="showModalDialog('../ShozokuData/?ShozokuCode=${emp.shozoku.shozoku_code}', '', 'dialogHeight:270px;dialogWidth:260px');">
 								${emp.shozoku.shozoku_code} ${emp.shozoku.shozoku_name}</a></div></td>
-								<td title="${emp.employee_name}"><div class="tableColumn"><c:out value="${emp.employee_name}" escapeXml="true" /></div></td>
-								<td title="${emp.sex}"><div class="tableColumn"><c:out value="${emp.sex}" escapeXml="true" /></div></td>
-								<td title="${emp.age}"><div class="tableColumn">
+								<td title="${emp.employee_name}"><div class="tableColumn"  id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><c:out value="${emp.employee_name}" escapeXml="true" /></div></td>
+								<td title="${emp.sex}"><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><c:out value="${emp.sex}" escapeXml="true" /></div></td>
+								<td title="${emp.age}"><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')">
 								<c:if test="${emp.age==0}">
+
 								</c:if>
 								<c:if test="${emp.age!=0}">
 									<c:out value="${emp.age}" escapeXml="true" />
 								</c:if>
 								</div></td>
-								<td title="${emp.birthdayAtSlash}"><div class="tableColumn"><c:out value="${emp.birthdayAtSlash}" escapeXml="true" /></div></td>
-								<td title="${emp.pref_CD}"><div class="tableColumn"><c:out value="${emp.pref_CD}" escapeXml="true" /></div></td>
-								<td title="${emp.address}"><div class="tableColumn"><c:out value="${emp.address}" escapeXml="true" /></div></td>
-								<td title="${emp.mail_address}"><div class="tableColumn"><c:out value="${emp.mail_address}" escapeXml="true" /></div></td>
-								<td title="${emp.note}"><div class="tableColumn"><c:out value="${emp.note}" escapeXml="true" /></div></td>
+								<td title="${emp.birthdayAtSlash}"><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><c:out value="${emp.birthdayAtSlash}" escapeXml="true" /></div></td>
+								<td title="${emp.prefName}"><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><c:out value="${emp.prefName}" escapeXml="true" /></div></td>
+								<td title="${emp.address}"><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><c:out value="${emp.address}" escapeXml="true" /></div></td>
+								<td title="${emp.mail_address}"><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><c:out value="${emp.mail_address}" escapeXml="true" /></div></td>
+								<td title="${emp.note}"><div class="tableColumn" id="labelId_${emp.employee_no}" onclick="radioPush('labelId_${emp.employee_no}')"><c:out value="${emp.note}" escapeXml="true" /></div></td>
 							</tr>
 						</c:forEach>
 					</table>
 				</div>
+				</c:if>
 			</div>
 		</form>
 	</div>

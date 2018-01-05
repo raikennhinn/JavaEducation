@@ -16,6 +16,10 @@ import webApplication.util.MessegeUtility;
 
 public class EmployeeDeleteServlet extends CommonServlet {
 
+	/**
+	 * 削除処理を行う
+	 *
+	 */
 	@Override
 	protected void doServlet(HttpServletRequest req, HttpServletResponse resp, HttpSession hpSession, Logger logger)
 			throws ServletException, IOException {
@@ -26,7 +30,6 @@ public class EmployeeDeleteServlet extends CommonServlet {
 		int delete = 0;
 
 		try {
-
 
 			delete = emp.deleteSQL(String.valueOf(req.getParameter("empNoUp")));
 

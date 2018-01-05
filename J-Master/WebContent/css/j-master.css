@@ -8,9 +8,8 @@ h1{
 	font-size: 17px;
 }
 h2{
-	/*color		:	blue;*/
 	font-size: 14px;
-	background-color:#20b2aa;
+	background-color:#64B5D7;
 }
 p.input {
 	height:20px;
@@ -27,10 +26,12 @@ span.input {
 }
 th {
 	font-size: 10px;
+	vertical-align: middle;
 }
 td {
 	font-size: 10px;
 	height:24px;
+	vertical-align: middle;
 }
 #error_msg {
 	color	:red;
@@ -39,9 +40,10 @@ td {
 	float:left;
 	width:150px;
 	height:420px;
-	border-right: 2px solid #777777;
+	/*border-right: 2px solid #777777;*/
 	margin-right: 10px;
-	background-color:#1e90ff;
+	/*background-color:#1e90ff;*/
+	background: linear-gradient(-270deg, #1e90ff, #FFFFFF);
 	z-index:10;
 }
 #main_field {
@@ -54,7 +56,7 @@ td {
 	z-index:0;
 }
 #pager_and_dataChangeButtons {
-	fload:left;
+
 	margin-bottom:10px;
 }
 #pager {
@@ -72,11 +74,23 @@ td {
 
 }
 
+#Absolutely{
+	color	: green;
+}
+
 /*固定するタイトル*/
 #titleXYBlockTable{
 	float:left;
 	table-layout: fixed;
 }
+/*データが0件だった場合の左上テーブルの表示*/
+#titleZeroXYBlockTable {
+    float: left;
+    table-layout: fixed;
+	border-collapse: separate;
+    border-spacing: 1.1px;
+}
+
 /*横スクロールする部分のタイトル*/
 #titleXBlock {
 	float:left;
@@ -84,6 +98,21 @@ td {
 	overflow-x: hidden; /* 横スクロールはJavaScriptで */
 	overflow-y: hidden;
 }
+#titleXzeroXYBlock {
+	float:left;
+	height: 25px;
+	border: 1;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+/*検索結果なしのタイトル画面*/
+#titleXzeroBlock {
+	float:left;
+	width: 455px;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
 #titleXBlockTable {
 	width: 1170px;
 	table-layout: fixed;
@@ -114,15 +143,103 @@ td {
 div.tableColumn {
 	white-space: nowrap;
 	overflow:hidden;
+	width: 100%;
+	height: 22px;
+	line-height: 22px;
 }
 
-div.button { text-align: left;
-			float: left;
-				 }
-div.link { text-align: right; }
+div.leaderTable{
+	white-space: nowrap;
+	overflow:hidden;
+	width: 100%;
+	height: 100%;
+	line-height: 50%S;
+}
+/*
+div.button {
+	text-align: left;
+	float: left;
+}
+*/
+
+div.link {
+	text-align: right;
+}
 
 table.tableFontSize {
 	font-size : 10px;
+	vertical-align: middle;
+}
+
+tr:nth-child(2n){
+	background: #58ACFA;
+}
+
+tr:nth-child(2n-1){
+	background: #A9E2F3;
+}
+
+/*先頭行の左側に色をつけない*/
+#titleXYBlockTable tr:first-child,#titleXYBlockTable th:first-child {
+	background: #FFFFFF;
+}
+
+/*先頭行の右側に色をつけない*/
+#titleXBlock tr:first-child,#titleXBlock th:first-child{
+	background: #FFFFFF;
+}
+
+.shozoku_List tr:hover {
+	background: #2EFEF7;
 }
 
 
+
+/*所属一覧の先頭行に色をつけない*/
+.shozoku_ListTitle tr:first-child,.shozoku_ListTitle th:first-child{
+	background: #FFFFFF;
+}
+
+#titleXBlockTable tr:first-child,#titleXBlockTable th:first-child{
+	background: #FFFFFF;
+}
+
+#titleZeroXYBlockTable tr:first-child,#titleZeroXYBlockTable th:first-child{
+	background: #FFFFFF;
+}
+
+#dateBlock {
+	float: left;
+	width: 435px;
+	height:290px;
+	overflow-y: scroll;
+
+}
+
+.LeaderSelect tr:hover{
+	background: #2EFEF7;
+}
+
+
+.LeaderSelect tr:first-child,.LeaderSelect th:first-child{
+	background: #FFFFFF;
+}
+
+
+.LeaderSelect {
+	width: 250px;
+	table-layout:fixed;
+	white-space: nowrap;
+	overflow:hidden;
+}
+
+
+.LeaderDiv {
+	padding-right:40px;
+}
+
+
+#csvbutton{
+	float:right;
+	padding-right: 20px;
+}
