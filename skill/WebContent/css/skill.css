@@ -1,0 +1,57 @@
+@CHARSET "UTF-8";
+body {
+	font-family: "Meiryo","ＭＳ Ｐゴシック",sans-serif;
+}
+
+/* 画面右上　ユーザ情報ヘッダ */
+.user_header{
+	position:absolute;
+	right:5px;
+	margin:5px;
+}
+.user_header_nav{
+	position:relative;
+	left:270px;
+	margin:5px;
+}
+.user_header_span{
+	padding:10px;
+}
+
+input.imeoff {
+	ime-mode:disabled;
+}
+
+input.required {
+	background-color:#81F79F;
+	border:1px solid gray;
+}
+
+input.error {
+	background-color:#FF6347;
+}
+
+select.required {
+	background-color:#81F79F;
+	border:1px solid gray;
+}
+
+select.error {
+	background-color:#FF6347;
+}
+
+div.info_message, span.info_message {
+	color:blue;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+div.caution_message, span.caution_message  {
+	color:#FFA301;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+div.error_message, span.error_message {
+	color:red;
+	margin-top:10px;
+	margin-bottom:10px;
+}

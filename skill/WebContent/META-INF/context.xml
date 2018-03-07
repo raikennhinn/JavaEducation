@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Context displayName="skill_management" docBase="skill_management" path="/skill_management"
+	reloadable="true">
+	<Resource name="jdbc/skill_management" auth="Container"
+		type="javax.sql.DataSource" username="skill" password="skill"
+		driverClassName="org.gjt.mm.mysql.Driver"
+		url="jdbc:mysql://localhost/skill_management?useUnicode=true&amp;characterEncoding=UTF-8"
+		maxActive="4" maxWait="5000" maxIdle="2"
+		validationQuery="SELECT count(*) FROM member_basic" />
+</Context>

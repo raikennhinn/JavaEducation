@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>skill</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+	<!-- ログイン -->
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>skillManagement.servlet.LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/skillManagement/LoginServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- ログアウト -->
+	<servlet>
+		<servlet-name>LogoutServlet</servlet-name>
+		<servlet-class>skillManagement.servlet.LogoutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LogoutServlet</servlet-name>
+		<url-pattern>/skillManagement/LogoutServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- メンバー基本情報作成画面表示 -->
+	<servlet>
+		<servlet-name>DispCreateMemberBasicInfoServlet</servlet-name>
+		<servlet-class>skillManagement.servlet.DispCreateMemberBasicInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DispCreateMemberBasicInfoServlet</servlet-name>
+		<url-pattern>/skillManagement/DispCreateMemberBasicInfoServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- メンバー基本情報作成実行 -->
+	<servlet>
+		<servlet-name>ExeCreateMemberBasicInfoServlet</servlet-name>
+		<servlet-class>skillManagement.servlet.ExeCreateMemberBasicInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExeCreateMemberBasicInfoServlet</servlet-name>
+		<url-pattern>/skillManagement/ExeCreateMemberBasicInfoServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- メンバー一覧 表示 -->
+	<servlet>
+		<servlet-name>MemberListServlet</servlet-name>
+		<servlet-class>skillManagement.servlet.MemberListServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MemberListServlet</servlet-name>
+		<url-pattern>/skillManagement/MemberListServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- メンバー一覧　氏名リンククリック -->
+	<servlet>
+		<servlet-name>NameLinkClickServlet</servlet-name>
+		<servlet-class>skillManagement.servlet.NameLinkClickServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NameLinkClickServlet</servlet-name>
+		<url-pattern>/skillManagement/NameLinkClickServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- メンバー一覧　ページリンククリック -->
+	<servlet>
+		<servlet-name>PageLinkClickServlet</servlet-name>
+		<servlet-class>skillManagement.servlet.PageLinkClickServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PageLinkClickServlet</servlet-name>
+		<url-pattern>/skillManagement/PageLinkClickServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- メンバー基本情報入力 -->
+	<servlet>
+		<servlet-name>InputMemberBasicInfoServlet</servlet-name>
+		<servlet-class>skillManagement.servlet.InputMemberBasicInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InputMemberBasicInfoServlet</servlet-name>
+		<url-pattern>/skillManagement/InputMemberBasicInfoServlet</url-pattern>
+	</servlet-mapping>
+</web-app>
